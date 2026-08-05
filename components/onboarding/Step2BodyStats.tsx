@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, TextInput } from 'react-native'
-import { colors, fontSize, spacing, radius } from '@/constants/theme'
+import { theme, fontSize, spacing, radius } from '@/constants/theme'
 
 interface Step2Props {
   height: string
@@ -22,13 +22,13 @@ export default function Step2BodyStats({
   onNext, onBack,
 }: Step2Props) {
   return (
-    <View style={{ padding: spacing.lg, paddingTop: spacing.xxl }}>
+    <View style={{ padding: spacing.lg, paddingTop: spacing.xxl, backgroundColor: theme.bg }}>
 
       {/* Title */}
       <Text style={{
         fontSize: fontSize.xxl,
         fontWeight: '800',
-        color: colors.textPrimary,
+        color: theme.textPrimary,
         marginBottom: spacing.xl,
         marginTop: spacing.xxl,
       }}>
@@ -36,7 +36,7 @@ export default function Step2BodyStats({
       </Text>
 
       {/* Height unit toggle */}
-      <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
+      <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
         Height Unit
       </Text>
       <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.md }}>
@@ -50,11 +50,11 @@ export default function Step2BodyStats({
               borderRadius: radius.md,
               alignItems: 'center',
               borderWidth: 1,
-              backgroundColor: heightUnit === unit ? colors.primary : colors.bgCard,
-              borderColor: heightUnit === unit ? colors.primary : colors.border,
+              backgroundColor: heightUnit === unit ? theme.accent : theme.surface,
+              borderColor: heightUnit === unit ? theme.accent : theme.border,
             }}
           >
-            <Text style={{ color: heightUnit === unit ? '#fff' : colors.textSecondary, fontWeight: '600' }}>
+            <Text style={{ color: heightUnit === unit ? theme.textPrimary : theme.textSecondary, fontWeight: '600' }}>
               {unit}
             </Text>
           </TouchableOpacity>
@@ -62,7 +62,7 @@ export default function Step2BodyStats({
       </View>
 
       {/* Height input */}
-      <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
+      <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
         Height ({heightUnit})
       </Text>
       <TextInput
@@ -70,21 +70,21 @@ export default function Step2BodyStats({
         keyboardType="numeric"
         value={height}
         onChangeText={setHeight}
-        placeholderTextColor={colors.textMuted}
+        placeholderTextColor={theme.textMuted}
         style={{
           borderWidth: 1,
-          borderColor: colors.border,
+          borderColor: theme.border,
           borderRadius: radius.md,
           padding: spacing.md,
           marginBottom: spacing.lg,
-          color: colors.textPrimary,
-          backgroundColor: colors.bgCard,
+          color: theme.textPrimary,
+          backgroundColor: theme.surface,
           fontSize: fontSize.md,
         }}
       />
 
       {/* Weight unit toggle */}
-      <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
+      <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
         Weight Unit
       </Text>
       <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.md }}>
@@ -98,11 +98,11 @@ export default function Step2BodyStats({
               borderRadius: radius.md,
               alignItems: 'center',
               borderWidth: 1,
-              backgroundColor: weightUnit === unit ? colors.primary : colors.bgCard,
-              borderColor: weightUnit === unit ? colors.primary : colors.border,
+              backgroundColor: weightUnit === unit ? theme.accent : theme.surface,
+              borderColor: weightUnit === unit ? theme.accent : theme.border,
             }}
           >
-            <Text style={{ color: weightUnit === unit ? '#fff' : colors.textSecondary, fontWeight: '600' }}>
+            <Text style={{ color: weightUnit === unit ? theme.textPrimary : theme.textSecondary, fontWeight: '600' }}>
               {unit}
             </Text>
           </TouchableOpacity>
@@ -110,7 +110,7 @@ export default function Step2BodyStats({
       </View>
 
       {/* Weight input */}
-      <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
+      <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
         Weight ({weightUnit})
       </Text>
       <TextInput
@@ -118,15 +118,15 @@ export default function Step2BodyStats({
         keyboardType="numeric"
         value={weight}
         onChangeText={setWeight}
-        placeholderTextColor={colors.textMuted}
+        placeholderTextColor={theme.textMuted}
         style={{
           borderWidth: 1,
-          borderColor: colors.border,
+          borderColor: theme.border,
           borderRadius: radius.md,
           padding: spacing.md,
           marginBottom: spacing.lg,
-          color: colors.textPrimary,
-          backgroundColor: colors.bgCard,
+          color: theme.textPrimary,
+          backgroundColor: theme.surface,
           fontSize: fontSize.md,
         }}
       />
@@ -138,14 +138,14 @@ export default function Step2BodyStats({
           style={{
             flex: 1,
             padding: spacing.md,
-            backgroundColor: colors.bgCard,
+            backgroundColor: theme.surface,
             borderRadius: radius.md,
             alignItems: 'center',
             borderWidth: 1,
-            borderColor: colors.border,
+            borderColor: theme.border,
           }}
         >
-          <Text style={{ color: colors.textPrimary, fontWeight: '600' }}>← Back</Text>
+          <Text style={{ color: theme.textPrimary, fontWeight: '600' }}>← Back</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -154,12 +154,13 @@ export default function Step2BodyStats({
           style={{
             flex: 1,
             padding: spacing.md,
-            backgroundColor: (!height || !weight) ? colors.primaryDark : colors.primary,
+            backgroundColor: theme.accent,
+            opacity: (!height || !weight) ? 0.5 : 1,
             borderRadius: radius.md,
             alignItems: 'center',
           }}
         >
-          <Text style={{ color: '#fff', fontWeight: '600' }}>Next →</Text>
+          <Text style={{ color: theme.textPrimary, fontWeight: '600' }}>Next →</Text>
         </TouchableOpacity>
       </View>
 

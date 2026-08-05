@@ -1,6 +1,6 @@
 import { ScrollView } from 'react-native'
 import { useState } from 'react'
-import { colors } from '@/constants/theme'
+import { theme } from '@/constants/theme'
 import { Sex, Goal, ActivityLevel } from '@/types'
 import Step1BasicInfo from '@/components/onboarding/Step1BasicInfo'
 import Step2BodyStats from '@/components/onboarding/Step2BodyStats'
@@ -24,9 +24,9 @@ export default function OnboardingScreen() {
   // Step 3 state
   const [goal, setGoal] = useState<Goal | null>(null)
 
-  
+
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ flexGrow: 1 }}>
+    <ScrollView style={{ flex: 1, backgroundColor: theme.bg }} contentContainerStyle={{ flexGrow: 1 }}>
       {step === 1 && (
         <Step1BasicInfo
           name={name}
@@ -82,7 +82,7 @@ export default function OnboardingScreen() {
           onBack={() => setStep(4)}
         />
       )}
-    </ScrollView>   
+    </ScrollView>
   )
 
 }

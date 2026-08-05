@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons'
 import Svg, { Circle, Text as SvgText } from 'react-native-svg'
 import { useAppStore } from '@/stores/useAppStore'
-import { colors, spacing, fontSize, radius } from '@/constants/theme'
+import { theme, spacing, fontSize, radius } from '@/constants/theme'
 import { fetchDayLogs, sumNutrition, fetchStreak, type MealLog } from '@/lib/foodAgent'
 import { fetchWaterGlasses, addWaterGlass, removeLastWaterGlass, fetchLatestWeight } from '@/lib/health'
 import LogFoodSheet from '@/components/nutrition/LogFoodSheet'
@@ -22,44 +22,44 @@ function CalorieRing({ eaten, target }: { eaten: number; target: number }) {
   const isOver = eaten > target
   return (
     <Svg width={140} height={140} viewBox="0 0 140 140">
-      <Circle cx="70" cy="70" r={RADIUS} fill="none" stroke="#27272a" strokeWidth="11" />
+      <Circle cx="70" cy="70" r={RADIUS} fill="none" stroke={theme.border} strokeWidth="11" />
       <Circle
         cx="70" cy="70" r={RADIUS}
         fill="none"
-        stroke={isOver ? '#f87171' : colors.primary}
+        stroke={theme.accent}
         strokeWidth="11"
         strokeLinecap="round"
         strokeDasharray={`${progress} ${CIRCUMFERENCE}`}
         transform="rotate(-90 70 70)"
       />
       {/* Calories eaten */}
-      <SvgText x="70" y="58" textAnchor="middle" fill="#ffffff" fontSize="26" fontWeight="800">
+      <SvgText x="70" y="58" textAnchor="middle" fill={theme.textPrimary} fontSize="26" fontWeight="800">
         {eaten.toLocaleString()}
       </SvgText>
       {/* kcal label */}
-      <SvgText x="70" y="74" textAnchor="middle" fill="#a1a1aa" fontSize="11" fontWeight="500">
+      <SvgText x="70" y="74" textAnchor="middle" fill={theme.textSecondary} fontSize="11" fontWeight="500">
         kcal
       </SvgText>
       {/* remaining / over */}
-      <SvgText x="70" y="90" textAnchor="middle" fill={isOver ? '#f87171' : '#BFD32B'} fontSize="10" fontWeight="700">
+      <SvgText x="70" y="90" textAnchor="middle" fill={theme.accent} fontSize="10" fontWeight="700">
         {isOver ? `${(eaten - target).toLocaleString()} over` : `${remaining.toLocaleString()} left`}
       </SvgText>
     </Svg>
   )
 }
 
-function MacroBar({ label, eaten, target, color }: { label: string; eaten: number; target: number; color: string }) {
+function MacroBar({ label, eaten, target, opacity }: { label: string; eaten: number; target: number; opacity: number }) {
   const pct = Math.min((eaten / target) * 100, 100)
   return (
     <View style={{ gap: 5 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>{label}</Text>
-        <Text style={{ color: '#fff', fontSize: fontSize.sm, fontWeight: '700' }}>
-          {eaten}<Text style={{ color: colors.textSecondary, fontWeight: '400' }}>/{target}g</Text>
+        <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>{label}</Text>
+        <Text style={{ color: theme.textPrimary, fontSize: fontSize.sm, fontWeight: '700' }}>
+          {eaten}<Text style={{ color: theme.textSecondary, fontWeight: '400' }}>/{target}g</Text>
         </Text>
       </View>
-      <View style={{ height: 6, backgroundColor: '#27272a', borderRadius: 99 }}>
-        <View style={{ width: `${pct}%`, height: '100%', backgroundColor: color, borderRadius: 99 }} />
+      <View style={{ height: 6, backgroundColor: theme.surface, borderRadius: 99 }}>
+        <View style={{ width: `${pct}%`, height: '100%', backgroundColor: theme.accent, opacity, borderRadius: 99 }} />
       </View>
     </View>
   )
@@ -126,7 +126,7 @@ export default function DashboardScreen() {
   ]
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+    <View style={{ flex: 1, backgroundColor: theme.bg }}>
       <ScrollView
         contentContainerStyle={{
           padding: spacing.md,
@@ -137,38 +137,38 @@ export default function DashboardScreen() {
         {/* Header */}
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.lg }}>
           <View>
-            <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>{today}</Text>
-            <Text style={{ color: '#fff', fontSize: fontSize.xxl, fontWeight: '800', letterSpacing: -0.5, marginTop: 2 }}>
+            <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>{today}</Text>
+            <Text style={{ color: theme.textPrimary, fontSize: fontSize.xxl, fontWeight: '800', letterSpacing: -0.5, marginTop: 2 }}>
               {greeting()},{'\n'}{user?.name?.split(' ')[0] ?? 'Athlete'}
             </Text>
           </View>
           <View style={{
             width: 48, height: 48, borderRadius: 999,
-            backgroundColor: colors.primary,
+            backgroundColor: theme.accent,
             alignItems: 'center', justifyContent: 'center',
           }}>
-            <Text style={{ color: '#0a0a0a', fontWeight: '900', fontSize: fontSize.md }}>{initials}</Text>
+            <Text style={{ color: theme.textPrimary, fontWeight: '900', fontSize: fontSize.md }}>{initials}</Text>
           </View>
         </View>
 
         {/* Calorie ring + macro bars */}
         <View style={{
-          backgroundColor: colors.bgCard, borderRadius: radius.lg,
-          borderWidth: 1, borderColor: colors.border,
+          backgroundColor: theme.surface, borderRadius: radius.lg,
+          borderWidth: 1, borderColor: theme.border,
           padding: spacing.md, flexDirection: 'row', alignItems: 'center', gap: 20,
           marginBottom: spacing.sm,
         }}>
           {loading ? (
             <View style={{ width: 140, height: 140, alignItems: 'center', justifyContent: 'center' }}>
-              <ActivityIndicator color={colors.primary} size="large" />
+              <ActivityIndicator color={theme.accent} size="large" />
             </View>
           ) : (
             <CalorieRing eaten={eaten} target={target} />
           )}
           <View style={{ flex: 1, gap: 14, opacity: loading ? 0.4 : 1 }}>
-            <MacroBar label="Protein" eaten={nutrition.protein} target={user?.targetProtein ?? 140} color={colors.protein} />
-            <MacroBar label="Carbs"   eaten={nutrition.carbs}   target={user?.targetCarbs ?? 220}  color={colors.carbs} />
-            <MacroBar label="Fat"     eaten={nutrition.fat}     target={user?.targetFat ?? 70}     color={colors.fat} />
+            <MacroBar label="Protein" eaten={nutrition.protein} target={user?.targetProtein ?? 140} opacity={1} />
+            <MacroBar label="Carbs"   eaten={nutrition.carbs}   target={user?.targetCarbs ?? 220}  opacity={0.7} />
+            <MacroBar label="Fat"     eaten={nutrition.fat}     target={user?.targetFat ?? 70}     opacity={0.45} />
           </View>
         </View>
 
@@ -180,30 +180,32 @@ export default function DashboardScreen() {
               onPress={a.onPress}
               style={{
                 width: '47.5%',
-                backgroundColor: a.primary ? colors.primary : colors.bgCard,
+                backgroundColor: a.primary ? theme.accent : theme.surface,
                 borderRadius: radius.md,
                 borderWidth: a.primary ? 0 : 1,
-                borderColor: colors.border,
+                borderColor: theme.border,
                 padding: 16,
                 gap: 8,
               }}
             >
               <View style={{
                 width: 40, height: 40, borderRadius: 12,
-                backgroundColor: a.primary ? 'rgba(0,0,0,0.15)' : colors.primaryLight,
+                backgroundColor: a.primary ? 'rgba(0,0,0,0.15)' : 'transparent',
+                borderWidth: a.primary ? 0 : 1,
+                borderColor: theme.border,
                 alignItems: 'center', justifyContent: 'center',
               }}>
                 <Ionicons
                   name={a.icon}
                   size={22}
-                  color={a.primary ? '#0a0a0a' : colors.primary}
+                  color={a.primary ? theme.textPrimary : theme.accent}
                 />
               </View>
-              <Text style={{ color: a.primary ? '#0a0a0a' : '#fff', fontWeight: '800', fontSize: fontSize.sm }}>
+              <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.sm }}>
                 {a.label}
               </Text>
               {a.subtitle && (
-                <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, marginTop: -4 }}>
+                <Text style={{ color: a.primary ? theme.textPrimary : theme.textSecondary, opacity: a.primary ? 0.8 : 1, fontSize: fontSize.xs, marginTop: -4 }}>
                   {a.subtitle}
                 </Text>
               )}
@@ -214,37 +216,37 @@ export default function DashboardScreen() {
         {/* Streak + Water */}
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <View style={{
-            flex: 1, backgroundColor: colors.bgCard, borderRadius: radius.md,
-            borderWidth: 1, borderColor: colors.border, padding: spacing.md, gap: 6,
+            flex: 1, backgroundColor: theme.surface, borderRadius: radius.md,
+            borderWidth: 1, borderColor: theme.border, padding: spacing.md, gap: 6,
           }}>
             <View style={{
               width: 38, height: 38, borderRadius: 11,
-              backgroundColor: 'rgba(249,115,22,0.15)',
+              borderWidth: 1, borderColor: theme.border,
               alignItems: 'center', justifyContent: 'center',
             }}>
-              <Ionicons name="flame" size={20} color="#f97316" />
+              <Ionicons name="flame" size={20} color={theme.accent} />
             </View>
-            <Text style={{ color: '#fff', fontSize: 28, fontWeight: '800', marginTop: 2 }}>
-              {streak} <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, fontWeight: '500' }}>days</Text>
+            <Text style={{ color: theme.textPrimary, fontSize: 28, fontWeight: '800', marginTop: 2 }}>
+              {streak} <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, fontWeight: '500' }}>days</Text>
             </Text>
-            <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>Logging streak</Text>
+            <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>Logging streak</Text>
           </View>
           <View style={{
-            flex: 1, backgroundColor: colors.bgCard, borderRadius: radius.md,
-            borderWidth: 1, borderColor: colors.border, padding: spacing.md, gap: 6,
+            flex: 1, backgroundColor: theme.surface, borderRadius: radius.md,
+            borderWidth: 1, borderColor: theme.border, padding: spacing.md, gap: 6,
           }}>
             <View style={{
               width: 38, height: 38, borderRadius: 11,
-              backgroundColor: 'rgba(56,189,248,0.15)',
+              borderWidth: 1, borderColor: theme.border,
               alignItems: 'center', justifyContent: 'center',
             }}>
-              <Ionicons name="water" size={20} color="#38bdf8" />
+              <Ionicons name="water" size={20} color={theme.accent} />
             </View>
-            <Text style={{ color: '#fff', fontSize: 28, fontWeight: '800', marginTop: 2 }}>
-              {waterGlasses}<Text style={{ color: colors.textSecondary, fontWeight: '500', fontSize: fontSize.lg }}>/8</Text>
+            <Text style={{ color: theme.textPrimary, fontSize: 28, fontWeight: '800', marginTop: 2 }}>
+              {waterGlasses}<Text style={{ color: theme.textSecondary, fontWeight: '500', fontSize: fontSize.lg }}>/8</Text>
             </Text>
-            <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>
-              Glasses · <Text style={{ color: '#fff', fontWeight: '600' }}>{(waterGlasses * 0.25).toFixed(2)}</Text>
+            <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>
+              Glasses · <Text style={{ color: theme.textPrimary, fontWeight: '600' }}>{(waterGlasses * 0.25).toFixed(2)}</Text>
               <Text> / 2.0 L</Text>
             </Text>
             <View style={{ flexDirection: 'row', gap: 8, marginTop: 4 }}>
@@ -257,11 +259,11 @@ export default function DashboardScreen() {
                 }}
                 style={{
                   flex: 1, height: 32, borderRadius: 8,
-                  backgroundColor: colors.bg, borderWidth: 1, borderColor: colors.border,
+                  backgroundColor: theme.bg, borderWidth: 1, borderColor: theme.border,
                   alignItems: 'center', justifyContent: 'center',
                 }}
               >
-                <Ionicons name="remove" size={18} color={waterGlasses > 0 ? '#fff' : colors.textMuted} />
+                <Ionicons name="remove" size={18} color={waterGlasses > 0 ? theme.textPrimary : theme.textMuted} />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={async () => {
@@ -270,11 +272,11 @@ export default function DashboardScreen() {
                 }}
                 style={{
                   flex: 1, height: 32, borderRadius: 8,
-                  backgroundColor: '#38bdf820', borderWidth: 1, borderColor: '#38bdf840',
+                  backgroundColor: theme.bg, borderWidth: 1, borderColor: theme.border,
                   alignItems: 'center', justifyContent: 'center',
                 }}
               >
-                <Ionicons name="add" size={18} color="#38bdf8" />
+                <Ionicons name="add" size={18} color={theme.accent} />
               </TouchableOpacity>
             </View>
           </View>

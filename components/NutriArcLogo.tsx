@@ -1,6 +1,5 @@
 import Svg, { Circle, Path, Text as SvgText } from 'react-native-svg'
-
-const PRIMARY = '#BFD32B'
+import { theme } from '@/constants/theme'
 
 interface Props {
   size?: number
@@ -46,25 +45,25 @@ export default function NutriArcLogo({ size = 80 }: Props) {
   return (
     <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       {/* Ring */}
-      <Path d={arcPath} fill={PRIMARY} />
+      <Path d={arcPath} fill={theme.accent} />
       {/* N — white, slightly left of centre */}
       <SvgText
         x={cx - size * 0.07}
         y={cy + fontSize * 0.35}
         textAnchor="middle"
-        fill="#ffffff"
+        fill={theme.textPrimary}
         fontSize={fontSize}
         fontWeight="900"
         fontFamily="Arial Black, Arial"
       >
         N
       </SvgText>
-      {/* A — lime, slightly right of centre */}
+      {/* A — accent, slightly right of centre */}
       <SvgText
         x={cx + size * 0.16}
         y={cy + fontSize * 0.35}
         textAnchor="middle"
-        fill={PRIMARY}
+        fill={theme.accent}
         fontSize={fontSize}
         fontWeight="900"
         fontFamily="Arial Black, Arial"

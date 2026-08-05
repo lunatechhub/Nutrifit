@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import { colors, fontSize, spacing, radius } from '@/constants/theme'
+import { theme, fontSize, spacing, radius } from '@/constants/theme'
 import { Goal } from '@/types'
 import { goalLabels } from '@/constants/config'
 
@@ -12,13 +12,13 @@ interface Step3Props {
 
 export default function Step3Goal({ goal, setGoal, onNext, onBack }: Step3Props) {
   return (
-    <View style={{ padding: spacing.lg, paddingTop: spacing.xxl }}>
+    <View style={{ padding: spacing.lg, paddingTop: spacing.xxl, backgroundColor: theme.bg }}>
 
       {/* Title */}
       <Text style={{
         fontSize: fontSize.xxl,
         fontWeight: '800',
-        color: colors.textPrimary,
+        color: theme.textPrimary,
         marginBottom: spacing.xl,
         marginTop: spacing.xxl,
       }}>
@@ -26,7 +26,7 @@ export default function Step3Goal({ goal, setGoal, onNext, onBack }: Step3Props)
       </Text>
 
       {/* Goal options */}
-      <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
+      <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
         Select your goal
       </Text>
       <View style={{ gap: spacing.sm, marginBottom: spacing.md }}>
@@ -38,11 +38,11 @@ export default function Step3Goal({ goal, setGoal, onNext, onBack }: Step3Props)
               padding: spacing.md,
               borderRadius: radius.md,
               borderWidth: 1,
-              backgroundColor: goal === g ? colors.primary : colors.bgCard,
-              borderColor: goal === g ? colors.primary : colors.border,
+              backgroundColor: goal === g ? theme.accent : theme.surface,
+              borderColor: goal === g ? theme.accent : theme.border,
             }}
           >
-            <Text style={{ color: goal === g ? '#fff' : colors.textPrimary, fontWeight: '600', fontSize: fontSize.md }}>
+            <Text style={{ color: theme.textPrimary, fontWeight: '600', fontSize: fontSize.md }}>
               {goalLabels[g]}
             </Text>
           </TouchableOpacity>
@@ -56,14 +56,14 @@ export default function Step3Goal({ goal, setGoal, onNext, onBack }: Step3Props)
           style={{
             flex: 1,
             padding: spacing.md,
-            backgroundColor: colors.bgCard,
+            backgroundColor: theme.surface,
             borderRadius: radius.md,
             alignItems: 'center',
             borderWidth: 1,
-            borderColor: colors.border,
+            borderColor: theme.border,
           }}
         >
-          <Text style={{ color: colors.textPrimary, fontWeight: '600' }}>← Back</Text>
+          <Text style={{ color: theme.textPrimary, fontWeight: '600' }}>← Back</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -72,12 +72,13 @@ export default function Step3Goal({ goal, setGoal, onNext, onBack }: Step3Props)
           style={{
             flex: 1,
             padding: spacing.md,
-            backgroundColor: !goal ? colors.primaryDark : colors.primary,
+            backgroundColor: theme.accent,
+            opacity: !goal ? 0.5 : 1,
             borderRadius: radius.md,
             alignItems: 'center',
           }}
         >
-          <Text style={{ color: '#fff', fontWeight: '600' }}>Next →</Text>
+          <Text style={{ color: theme.textPrimary, fontWeight: '600' }}>Next →</Text>
         </TouchableOpacity>
       </View>
 

@@ -24,6 +24,9 @@ export function useAuth() {
         } else {
           setLoading(false)
         }
+      }).catch((error) => {
+        console.error('Error getting session:', error)
+        setLoading(false)
       })
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange(

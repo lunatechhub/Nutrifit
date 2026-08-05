@@ -13,7 +13,7 @@ import {
 } from 'react-native'
 import { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
-import { colors, spacing, fontSize, radius } from '@/constants/theme'
+import { theme, spacing, fontSize, radius } from '@/constants/theme'
 import {
   parseFoodInput,
   parseFoodFromImage,
@@ -153,16 +153,16 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
         {/* Sheet */}
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
           <View style={{
-            backgroundColor: colors.bg,
+            backgroundColor: theme.bg,
             borderTopLeftRadius: 28,
             borderTopRightRadius: 28,
             borderTopWidth: 1,
-            borderColor: colors.border,
+            borderColor: theme.border,
             maxHeight: SCREEN_HEIGHT * 0.88,
           }}>
             {/* Handle */}
             <View style={{ alignItems: 'center', paddingTop: 14, paddingBottom: 6 }}>
-              <View style={{ width: 40, height: 4, borderRadius: 99, backgroundColor: colors.border }} />
+              <View style={{ width: 40, height: 4, borderRadius: 99, backgroundColor: theme.border }} />
             </View>
 
             {/* Header */}
@@ -170,16 +170,16 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
               flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
               paddingHorizontal: spacing.md, paddingBottom: 14,
             }}>
-              <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800', letterSpacing: -0.3 }}>
+              <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800', letterSpacing: -0.3 }}>
                 Log Food
               </Text>
               <TouchableOpacity onPress={handleClose} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
                 <View style={{
                   width: 30, height: 30, borderRadius: 99,
-                  backgroundColor: colors.bgCard, borderWidth: 1, borderColor: colors.border,
+                  backgroundColor: theme.surface, borderWidth: 1, borderColor: theme.border,
                   alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <Text style={{ color: colors.textSecondary, fontSize: 18, lineHeight: 20 }}>×</Text>
+                  <Text style={{ color: theme.textSecondary, fontSize: 18, lineHeight: 20 }}>×</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -198,13 +198,13 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                     paddingVertical: 8,
                     paddingHorizontal: 16,
                     borderRadius: 999,
-                    backgroundColor: mealType === m.key ? colors.primary : colors.bgCard,
+                    backgroundColor: mealType === m.key ? theme.accent : theme.surface,
                     borderWidth: 1,
-                    borderColor: mealType === m.key ? 'transparent' : colors.border,
+                    borderColor: mealType === m.key ? 'transparent' : theme.border,
                   }}
                 >
                   <Text style={{
-                    color: mealType === m.key ? '#0a0a0a' : colors.textSecondary,
+                    color: mealType === m.key ? theme.textPrimary : theme.textSecondary,
                     fontWeight: '700',
                     fontSize: fontSize.sm,
                   }}>
@@ -224,17 +224,15 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
               {stage === 'options' && (
                 <View style={{ gap: 10 }}>
                   {error && (
-                    <Text style={{ color: colors.danger, fontSize: fontSize.sm, marginBottom: 4 }}>{error}</Text>
+                    <Text style={{ color: theme.accent, fontSize: fontSize.sm, marginBottom: 4 }}>{error}</Text>
                   )}
 
                   {/* Scan Food */}
                   <TouchableOpacity
                     onPress={promptScanSource}
                     style={{
-                      backgroundColor: colors.primaryLight,
+                      backgroundColor: theme.accent,
                       borderRadius: radius.lg,
-                      borderWidth: 1.5,
-                      borderColor: `${colors.primary}40`,
                       padding: 20,
                       flexDirection: 'row',
                       alignItems: 'center',
@@ -243,30 +241,30 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                   >
                     <View style={{
                       width: 52, height: 52, borderRadius: 16,
-                      backgroundColor: colors.primary,
+                      backgroundColor: 'rgba(0,0,0,0.15)',
                       alignItems: 'center', justifyContent: 'center',
                     }}>
                       <Text style={{ fontSize: 26 }}>📸</Text>
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={{ color: '#fff', fontWeight: '800', fontSize: fontSize.md }}>
+                      <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.md }}>
                         Scan Food
                       </Text>
-                      <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, marginTop: 2 }}>
+                      <Text style={{ color: theme.textPrimary, opacity: 0.8, fontSize: fontSize.sm, marginTop: 2 }}>
                         Point camera at your meal
                       </Text>
                     </View>
-                    <Text style={{ color: colors.primary, fontSize: 20 }}>›</Text>
+                    <Text style={{ color: theme.textPrimary, fontSize: 20 }}>›</Text>
                   </TouchableOpacity>
 
                   {/* Voice Log */}
                   <TouchableOpacity
                     onPress={() => { setInputMode('voice'); setStage('text') }}
                     style={{
-                      backgroundColor: colors.bgCard,
+                      backgroundColor: theme.surface,
                       borderRadius: radius.lg,
                       borderWidth: 1,
-                      borderColor: colors.border,
+                      borderColor: theme.border,
                       padding: 20,
                       flexDirection: 'row',
                       alignItems: 'center',
@@ -275,30 +273,30 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                   >
                     <View style={{
                       width: 52, height: 52, borderRadius: 16,
-                      backgroundColor: '#1f1f1f',
+                      backgroundColor: theme.bg,
                       alignItems: 'center', justifyContent: 'center',
                     }}>
                       <Text style={{ fontSize: 26 }}>🎤</Text>
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={{ color: '#fff', fontWeight: '800', fontSize: fontSize.md }}>
+                      <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.md }}>
                         Voice Log
                       </Text>
-                      <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, marginTop: 2 }}>
+                      <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, marginTop: 2 }}>
                         Tap mic on keyboard to speak
                       </Text>
                     </View>
-                    <Text style={{ color: colors.textMuted, fontSize: 20 }}>›</Text>
+                    <Text style={{ color: theme.textMuted, fontSize: 20 }}>›</Text>
                   </TouchableOpacity>
 
                   {/* Type it */}
                   <TouchableOpacity
                     onPress={() => { setInputMode('type'); setStage('text') }}
                     style={{
-                      backgroundColor: colors.bgCard,
+                      backgroundColor: theme.surface,
                       borderRadius: radius.lg,
                       borderWidth: 1,
-                      borderColor: colors.border,
+                      borderColor: theme.border,
                       padding: 20,
                       flexDirection: 'row',
                       alignItems: 'center',
@@ -307,20 +305,20 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                   >
                     <View style={{
                       width: 52, height: 52, borderRadius: 16,
-                      backgroundColor: '#1f1f1f',
+                      backgroundColor: theme.bg,
                       alignItems: 'center', justifyContent: 'center',
                     }}>
                       <Text style={{ fontSize: 26 }}>✏️</Text>
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={{ color: '#fff', fontWeight: '800', fontSize: fontSize.md }}>
+                      <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.md }}>
                         Type it
                       </Text>
-                      <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, marginTop: 2 }}>
+                      <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, marginTop: 2 }}>
                         Describe what you ate in text
                       </Text>
                     </View>
-                    <Text style={{ color: colors.textMuted, fontSize: 20 }}>›</Text>
+                    <Text style={{ color: theme.textMuted, fontSize: 20 }}>›</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -328,11 +326,11 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
               {/* SCANNING STAGE */}
               {stage === 'scanning' && (
                 <View style={{ alignItems: 'center', paddingVertical: 48, gap: 16 }}>
-                  <ActivityIndicator size="large" color={colors.primary} />
-                  <Text style={{ color: '#fff', fontWeight: '700', fontSize: fontSize.md }}>
+                  <ActivityIndicator size="large" color={theme.accent} />
+                  <Text style={{ color: theme.textPrimary, fontWeight: '700', fontSize: fontSize.md }}>
                     Analyzing your meal...
                   </Text>
-                  <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, textAlign: 'center' }}>
+                  <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, textAlign: 'center' }}>
                     Claude is identifying food items{'\n'}and calculating nutrition
                   </Text>
                 </View>
@@ -345,10 +343,10 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                     onPress={() => setStage('options')}
                     style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 }}
                   >
-                    <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>‹ Back</Text>
+                    <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>‹ Back</Text>
                   </TouchableOpacity>
 
-                  <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>
+                  <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>
                     {inputMode === 'voice'
                       ? 'Tap the mic on your keyboard to speak, or type normally'
                       : 'Describe everything you ate — be as specific as you like'}
@@ -362,16 +360,16 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                         ? 'Tap 🎤 on your keyboard and describe your meal...'
                         : 'e.g. fish fillet and chips at McDonald\'s, a small black coffee'
                     }
-                    placeholderTextColor={colors.textMuted}
+                    placeholderTextColor={theme.textMuted}
                     multiline
                     autoFocus
                     style={{
-                      backgroundColor: colors.bgInput,
+                      backgroundColor: theme.surface,
                       borderRadius: radius.md,
                       borderWidth: 1.5,
-                      borderColor: text.length > 0 ? colors.primary : colors.border,
+                      borderColor: text.length > 0 ? theme.accent : theme.border,
                       padding: 16,
-                      color: '#fff',
+                      color: theme.textPrimary,
                       fontSize: fontSize.md,
                       minHeight: 120,
                       textAlignVertical: 'top',
@@ -380,14 +378,14 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                   />
 
                   {error && (
-                    <Text style={{ color: colors.danger, fontSize: fontSize.sm }}>{error}</Text>
+                    <Text style={{ color: theme.accent, fontSize: fontSize.sm }}>{error}</Text>
                   )}
 
                   <TouchableOpacity
                     onPress={handleAnalyze}
                     disabled={!text.trim()}
                     style={{
-                      backgroundColor: text.trim() ? colors.primary : colors.bgCard,
+                      backgroundColor: text.trim() ? theme.accent : theme.surface,
                       borderRadius: radius.md,
                       padding: 17,
                       alignItems: 'center',
@@ -395,11 +393,11 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                       flexDirection: 'row',
                       gap: 8,
                       borderWidth: text.trim() ? 0 : 1,
-                      borderColor: colors.border,
+                      borderColor: theme.border,
                     }}
                   >
                     <Text style={{
-                      color: text.trim() ? '#0a0a0a' : colors.textMuted,
+                      color: text.trim() ? theme.textPrimary : theme.textMuted,
                       fontWeight: '900',
                       fontSize: fontSize.md,
                     }}>
@@ -414,10 +412,10 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                 <View style={{ gap: 12 }}>
                   {/* Items list */}
                   <View style={{
-                    backgroundColor: colors.bgCard,
+                    backgroundColor: theme.surface,
                     borderRadius: radius.lg,
                     borderWidth: 1,
-                    borderColor: colors.border,
+                    borderColor: theme.border,
                     overflow: 'hidden',
                   }}>
                     {items.map((item, i) => (
@@ -427,21 +425,21 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                         paddingVertical: 14,
                         paddingHorizontal: 16,
                         borderBottomWidth: i < items.length - 1 ? 1 : 0,
-                        borderBottomColor: colors.border,
+                        borderBottomColor: theme.border,
                         gap: 12,
                       }}>
                         <View style={{ flex: 1 }}>
-                          <Text style={{ color: '#fff', fontWeight: '700', fontSize: fontSize.md }}>
+                          <Text style={{ color: theme.textPrimary, fontWeight: '700', fontSize: fontSize.md }}>
                             {item.name}
                           </Text>
-                          <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, marginTop: 3 }}>
+                          <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, marginTop: 3 }}>
                             {item.quantity} {item.unit}
                             {'   '}{item.protein}g P · {item.carbs}g C · {item.fat}g F
                           </Text>
                         </View>
-                        <Text style={{ color: colors.primary, fontWeight: '800', fontSize: fontSize.md }}>
+                        <Text style={{ color: theme.accent, fontWeight: '800', fontSize: fontSize.md }}>
                           {Math.round(item.calories)}
-                          <Text style={{ fontSize: fontSize.xs, color: colors.textSecondary, fontWeight: '500' }}> kcal</Text>
+                          <Text style={{ fontSize: fontSize.xs, color: theme.textSecondary, fontWeight: '500' }}> kcal</Text>
                         </Text>
                       </View>
                     ))}
@@ -449,29 +447,27 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
 
                   {/* Total */}
                   <View style={{
-                    backgroundColor: colors.primaryLight,
+                    backgroundColor: theme.accent,
                     borderRadius: radius.lg,
-                    borderWidth: 1,
-                    borderColor: `${colors.primary}35`,
                     padding: 16,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}>
                     <View>
-                      <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, fontWeight: '700', letterSpacing: 0.5 }}>TOTAL</Text>
-                      <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, marginTop: 3 }}>
+                      <Text style={{ color: theme.textPrimary, opacity: 0.85, fontSize: fontSize.xs, fontWeight: '700', letterSpacing: 0.5 }}>TOTAL</Text>
+                      <Text style={{ color: theme.textPrimary, opacity: 0.85, fontSize: fontSize.sm, marginTop: 3 }}>
                         P {totalP}g · C {totalC}g · F {totalF}g
                       </Text>
                     </View>
-                    <Text style={{ color: colors.primary, fontWeight: '900', fontSize: fontSize.xxl }}>
+                    <Text style={{ color: theme.textPrimary, fontWeight: '900', fontSize: fontSize.xxl }}>
                       {totalCal}
                       <Text style={{ fontSize: fontSize.sm, fontWeight: '600' }}> kcal</Text>
                     </Text>
                   </View>
 
                   {error && (
-                    <Text style={{ color: colors.danger, fontSize: fontSize.sm }}>{error}</Text>
+                    <Text style={{ color: theme.accent, fontSize: fontSize.sm }}>{error}</Text>
                   )}
 
                   {/* Log button */}
@@ -479,7 +475,7 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                     onPress={handleLog}
                     disabled={saving}
                     style={{
-                      backgroundColor: colors.primary,
+                      backgroundColor: theme.accent,
                       borderRadius: radius.md,
                       padding: 17,
                       alignItems: 'center',
@@ -489,8 +485,8 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                     }}
                   >
                     {saving
-                      ? <ActivityIndicator size="small" color="#0a0a0a" />
-                      : <Text style={{ color: '#0a0a0a', fontWeight: '900', fontSize: fontSize.md }}>
+                      ? <ActivityIndicator size="small" color={theme.textPrimary} />
+                      : <Text style={{ color: theme.textPrimary, fontWeight: '900', fontSize: fontSize.md }}>
                           Log {items.length} item{items.length !== 1 ? 's' : ''} to {MEALS.find(m => m.key === mealType)?.label}
                         </Text>
                     }
@@ -502,7 +498,7 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                     disabled={saving}
                     style={{ alignItems: 'center', paddingVertical: 10 }}
                   >
-                    <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>
+                    <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>
                       ‹ Start over
                     </Text>
                   </TouchableOpacity>

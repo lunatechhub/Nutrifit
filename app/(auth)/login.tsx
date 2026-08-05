@@ -12,7 +12,7 @@ import { useState } from 'react'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useAuth } from '@/hooks/useAuth'
-import { colors, spacing, fontSize, radius } from '@/constants/theme'
+import { theme, spacing, fontSize, radius } from '@/constants/theme'
 import NutriArcLogo from '@/components/NutriArcLogo'
 
 export default function LoginScreen() {
@@ -60,7 +60,7 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: colors.bg }}
+      style={{ flex: 1, backgroundColor: theme.bg }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
@@ -77,7 +77,7 @@ export default function LoginScreen() {
           <Text style={{
             fontSize: fontSize.xxxl,
             fontWeight: '800',
-            color: colors.textPrimary,
+            color: theme.textPrimary,
             letterSpacing: -1,
             marginTop: spacing.sm,
           }}>
@@ -85,7 +85,7 @@ export default function LoginScreen() {
           </Text>
           <Text style={{
             fontSize: fontSize.md,
-            color: colors.textSecondary,
+            color: theme.textSecondary,
             marginTop: spacing.xs,
           }}>
             Your AI-powered fitness companion
@@ -97,7 +97,7 @@ export default function LoginScreen() {
           <View>
             <Text style={{
               fontSize: fontSize.sm,
-              color: colors.textSecondary,
+              color: theme.textSecondary,
               marginBottom: spacing.xs,
               fontWeight: '600',
             }}>
@@ -107,18 +107,18 @@ export default function LoginScreen() {
               value={email}
               onChangeText={setEmail}
               placeholder="you@example.com"
-              placeholderTextColor={colors.textMuted}
+              placeholderTextColor={theme.textMuted}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
               style={{
-                backgroundColor: colors.bgCard,
+                backgroundColor: theme.surface,
                 borderRadius: radius.md,
                 padding: spacing.md,
-                color: colors.textPrimary,
+                color: theme.textPrimary,
                 fontSize: fontSize.md,
                 borderWidth: 1,
-                borderColor: colors.border,
+                borderColor: theme.border,
               }}
             />
           </View>
@@ -126,7 +126,7 @@ export default function LoginScreen() {
           <View>
             <Text style={{
               fontSize: fontSize.sm,
-              color: colors.textSecondary,
+              color: theme.textSecondary,
               marginBottom: spacing.xs,
               fontWeight: '600',
             }}>
@@ -137,17 +137,17 @@ export default function LoginScreen() {
                 value={password}
                 onChangeText={setPassword}
                 placeholder="••••••••"
-                placeholderTextColor={colors.textMuted}
+                placeholderTextColor={theme.textMuted}
                 secureTextEntry={!showPassword}
                 style={{
-                  backgroundColor: colors.bgCard,
+                  backgroundColor: theme.surface,
                   borderRadius: radius.md,
                   padding: spacing.md,
                   paddingRight: spacing.xxl,
-                  color: colors.textPrimary,
+                  color: theme.textPrimary,
                   fontSize: fontSize.md,
                   borderWidth: 1,
-                  borderColor: colors.border,
+                  borderColor: theme.border,
                 }}
               />
               <TouchableOpacity
@@ -161,7 +161,7 @@ export default function LoginScreen() {
                 <Ionicons
                   name={showPassword ? 'eye-off' : 'eye'}
                   size={20}
-                  color={colors.textSecondary}
+                  color={theme.textSecondary}
                 />
               </TouchableOpacity>
             </View>
@@ -173,7 +173,7 @@ export default function LoginScreen() {
             onPress={() => router.push('/(auth)/forgot-password')}
           >
             <Text style={{
-              color: colors.primary,
+              color: theme.accent,
               fontSize: fontSize.sm,
               fontWeight: '600',
             }}>
@@ -186,7 +186,8 @@ export default function LoginScreen() {
             onPress={handleLogin}
             disabled={loading}
             style={{
-              backgroundColor: loading ? colors.primaryDark : colors.primary,
+              backgroundColor: theme.accent,
+              opacity: loading ? 0.6 : 1,
               borderRadius: radius.md,
               padding: spacing.md,
               alignItems: 'center',
@@ -194,7 +195,7 @@ export default function LoginScreen() {
             }}
           >
             <Text style={{
-              color: '#fff',
+              color: theme.textPrimary,
               fontSize: fontSize.md,
               fontWeight: '700',
             }}>
@@ -209,9 +210,9 @@ export default function LoginScreen() {
             gap: spacing.md,
             marginVertical: spacing.sm,
           }}>
-            <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
-            <Text style={{ color: colors.textMuted, fontSize: fontSize.sm }}>or</Text>
-            <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />
+            <View style={{ flex: 1, height: 1, backgroundColor: theme.border }} />
+            <Text style={{ color: theme.textMuted, fontSize: fontSize.sm }}>or</Text>
+            <View style={{ flex: 1, height: 1, backgroundColor: theme.border }} />
           </View>
 
           {/* Register Link */}
@@ -222,11 +223,11 @@ export default function LoginScreen() {
               padding: spacing.md,
               alignItems: 'center',
               borderWidth: 1,
-              borderColor: colors.border,
+              borderColor: theme.border,
             }}
           >
             <Text style={{
-              color: colors.textPrimary,
+              color: theme.textPrimary,
               fontSize: fontSize.md,
               fontWeight: '600',
             }}>

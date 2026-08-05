@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import { colors, fontSize, spacing, radius } from '@/constants/theme'
+import { theme, fontSize, spacing, radius } from '@/constants/theme'
 import { activityLabels } from '@/constants/config'
 import { ActivityLevel } from '@/types'
 
@@ -12,13 +12,13 @@ interface Step4Props {
 
 export default function Step4Activity({ activityLevel, setActivityLevel, onNext, onBack }: Step4Props) {
     return (
-        <View style={{ padding: spacing.lg, paddingTop: spacing.xxl }}>
+        <View style={{ padding: spacing.lg, paddingTop: spacing.xxl, backgroundColor: theme.bg }}>
 
             {/* Title */}
             <Text style={{
                 fontSize: fontSize.xxl,
                 fontWeight: '800',
-                color: colors.textPrimary,
+                color: theme.textPrimary,
                 marginBottom: spacing.xl,
                 marginTop: spacing.xxl,
             }}>
@@ -26,7 +26,7 @@ export default function Step4Activity({ activityLevel, setActivityLevel, onNext,
             </Text>
 
             {/* Activity level options */}
-            <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
+            <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
                 Select your activity level
             </Text>
             <View style={{ gap: spacing.sm, marginBottom: spacing.md }}>
@@ -38,11 +38,11 @@ export default function Step4Activity({ activityLevel, setActivityLevel, onNext,
                             padding: spacing.md,
                             borderRadius: radius.md,
                             borderWidth: 1,
-                            backgroundColor: activityLevel === level ? colors.primary : colors.bgCard,
-                            borderColor: activityLevel === level ? colors.primary : colors.border,
+                            backgroundColor: activityLevel === level ? theme.accent : theme.surface,
+                            borderColor: activityLevel === level ? theme.accent : theme.border,
                         }}
                     >
-                        <Text style={{ color: activityLevel === level ? '#fff' : colors.textPrimary, fontWeight: '600', fontSize: fontSize.md }}>
+                        <Text style={{ color: theme.textPrimary, fontWeight: '600', fontSize: fontSize.md }}>
                             {activityLabels[level]}
                         </Text>
                     </TouchableOpacity>
@@ -56,12 +56,12 @@ export default function Step4Activity({ activityLevel, setActivityLevel, onNext,
                     style={{
                         flex: 1,
                         padding: spacing.md,
-                        backgroundColor: colors.bgCard,
+                        backgroundColor: theme.surface,
                         borderRadius: radius.md,
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: colors.textPrimary, fontWeight: '600', fontSize: fontSize.md }}>
+                    <Text style={{ color: theme.textPrimary, fontWeight: '600', fontSize: fontSize.md }}>
                         Back
                     </Text>
                 </TouchableOpacity>
@@ -71,16 +71,17 @@ export default function Step4Activity({ activityLevel, setActivityLevel, onNext,
                     style={{
                         flex: 1,
                         padding: spacing.md,
-                        backgroundColor: !activityLevel ? colors.primaryDark : colors.primary,
+                        backgroundColor: theme.accent,
+                        opacity: !activityLevel ? 0.5 : 1,
                         borderRadius: radius.md,
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: '#fff', fontWeight: '600', fontSize: fontSize.md }}>
+                    <Text style={{ color: theme.textPrimary, fontWeight: '600', fontSize: fontSize.md }}>
                         Next
                     </Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
-}   
+}

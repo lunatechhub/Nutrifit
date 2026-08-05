@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useAuth } from '../hooks/useAuth'
 import { useAppStore } from '../stores/useAppStore'
 import { View, ActivityIndicator } from 'react-native'
-import { colors } from '../constants/theme'
+import { theme } from '../constants/theme'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,15 +44,15 @@ function RootLayoutNav() {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.bg
+        backgroundColor: theme.bg
       }}>
-        <ActivityIndicator size="large" color={colors.primary} />
+        <ActivityIndicator size="large" color={theme.accent} />
       </View>
     )
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: theme.bg } }}>
       <Stack.Screen name="(auth)" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="onboarding/index" />
@@ -62,7 +62,7 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: theme.bg }}>
       <QueryClientProvider client={queryClient}>
         <StatusBar style="light" />
         <RootLayoutNav />

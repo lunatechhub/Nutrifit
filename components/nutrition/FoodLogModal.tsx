@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from 'react-native'
 import { useState, useRef } from 'react'
-import { colors, spacing, fontSize, radius } from '@/constants/theme'
+import { theme, spacing, fontSize, radius } from '@/constants/theme'
 import { parseFoodInput, logFoodItems, ParsedFoodItem, MealType } from '@/lib/foodAgent'
 
 interface Props {
@@ -84,6 +84,7 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
   const totalFat = items.reduce((s, i) => s + i.fat, 0).toFixed(1)
   const isBusy = stage === 'parsing' || stage === 'saving'
 
+
   return (
     <Modal
       visible={visible}
@@ -105,17 +106,17 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
         {/* Sheet slides in from bottom */}
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
           <View style={{
-            backgroundColor: colors.bg,
+            backgroundColor: theme.bg,
             borderTopLeftRadius: radius.xl,
             borderTopRightRadius: radius.xl,
             borderTopWidth: 1,
-            borderColor: colors.border,
+            borderColor: theme.border,
             maxHeight: SCREEN_HEIGHT * 0.85,
           }}>
 
             {/* Handle bar */}
             <View style={{ alignItems: 'center', paddingTop: 12, paddingBottom: 4 }}>
-              <View style={{ width: 36, height: 4, borderRadius: 99, backgroundColor: colors.border }} />
+              <View style={{ width: 36, height: 4, borderRadius: 99, backgroundColor: theme.border }} />
             </View>
 
             {/* Header */}
@@ -123,14 +124,14 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
               flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
               paddingHorizontal: spacing.md, paddingVertical: 10,
             }}>
-              <Text style={{ color: '#fff', fontSize: fontSize.lg, fontWeight: '800' }}>
+              <Text style={{ color: theme.textPrimary, fontSize: fontSize.lg, fontWeight: '800' }}>
                 Add to {MEAL_LABELS[mealType]}
               </Text>
               <TouchableOpacity
                 onPress={handleClose}
                 hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
               >
-                <Text style={{ color: colors.textSecondary, fontSize: 24, lineHeight: 26 }}>×</Text>
+                <Text style={{ color: theme.textSecondary, fontSize: 24, lineHeight: 26 }}>×</Text>
               </TouchableOpacity>
             </View>
 
@@ -143,7 +144,7 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
               {/* INPUT / PARSING STAGE */}
               {(stage === 'input' || stage === 'parsing') && (
                 <View style={{ gap: 12 }}>
-                  <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>
+                  <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>
                     Describe what you ate in plain English
                   </Text>
 
@@ -152,16 +153,16 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
                     value={text}
                     onChangeText={setText}
                     placeholder="e.g. fish fillet and chips at McDonald's, a black coffee"
-                    placeholderTextColor={colors.textMuted}
+                    placeholderTextColor={theme.textMuted}
                     multiline
                     autoFocus
                     style={{
-                      backgroundColor: colors.bgInput,
+                      backgroundColor: theme.surface,
                       borderRadius: radius.md,
                       borderWidth: 1,
-                      borderColor: text.length > 0 ? colors.primary : colors.border,
+                      borderColor: text.length > 0 ? theme.accent : theme.border,
                       padding: 14,
-                      color: '#fff',
+                      color: theme.textPrimary,
                       fontSize: fontSize.md,
                       minHeight: 100,
                       textAlignVertical: 'top',
@@ -170,14 +171,14 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
                   />
 
                   {error && (
-                    <Text style={{ color: colors.danger, fontSize: fontSize.xs }}>{error}</Text>
+                    <Text style={{ color: theme.accent, fontSize: fontSize.xs }}>{error}</Text>
                   )}
 
                   <TouchableOpacity
                     onPress={handleParse}
                     disabled={!text.trim() || isBusy}
                     style={{
-                      backgroundColor: text.trim() && !isBusy ? colors.primary : colors.bgCard,
+                      backgroundColor: text.trim() && !isBusy ? theme.accent : theme.surface,
                       borderRadius: radius.md,
                       padding: 15,
                       alignItems: 'center',
@@ -185,19 +186,19 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
                       justifyContent: 'center',
                       gap: 8,
                       borderWidth: 1,
-                      borderColor: text.trim() && !isBusy ? 'transparent' : colors.border,
+                      borderColor: text.trim() && !isBusy ? 'transparent' : theme.border,
                     }}
                   >
                     {stage === 'parsing' ? (
                       <>
-                        <ActivityIndicator size="small" color={colors.primary} />
-                        <Text style={{ color: colors.primary, fontWeight: '700', fontSize: fontSize.md }}>
+                        <ActivityIndicator size="small" color={theme.textPrimary} />
+                        <Text style={{ color: theme.textPrimary, fontWeight: '700', fontSize: fontSize.md }}>
                           Analyzing...
                         </Text>
                       </>
                     ) : (
                       <Text style={{
-                        color: text.trim() ? '#0a0a0a' : colors.textMuted,
+                        color: text.trim() ? theme.textPrimary : theme.textMuted,
                         fontWeight: '800',
                         fontSize: fontSize.md,
                       }}>
@@ -213,20 +214,20 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
                 <View style={{ gap: 12 }}>
                   {/* Original input */}
                   <View style={{
-                    backgroundColor: colors.bgCard, borderRadius: radius.md,
-                    borderWidth: 1, borderColor: colors.border,
+                    backgroundColor: theme.surface, borderRadius: radius.md,
+                    borderWidth: 1, borderColor: theme.border,
                     padding: 12, flexDirection: 'row', gap: 10, alignItems: 'flex-start',
                   }}>
                     <Text style={{ fontSize: 16 }}>💬</Text>
-                    <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, flex: 1, lineHeight: 20 }}>
+                    <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, flex: 1, lineHeight: 20 }}>
                       "{text}"
                     </Text>
                   </View>
 
                   {/* Parsed items list */}
                   <View style={{
-                    backgroundColor: colors.bgCard, borderRadius: radius.md,
-                    borderWidth: 1, borderColor: colors.border,
+                    backgroundColor: theme.surface, borderRadius: radius.md,
+                    borderWidth: 1, borderColor: theme.border,
                     overflow: 'hidden',
                   }}>
                     {items.map((item, i) => (
@@ -234,19 +235,19 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
                         flexDirection: 'row', alignItems: 'center',
                         paddingVertical: 12, paddingHorizontal: 14,
                         borderBottomWidth: i < items.length - 1 ? 1 : 0,
-                        borderBottomColor: colors.border,
+                        borderBottomColor: theme.border,
                         gap: 10,
                       }}>
                         <View style={{ flex: 1 }}>
-                          <Text style={{ color: '#fff', fontWeight: '600', fontSize: fontSize.sm }}>
+                          <Text style={{ color: theme.textPrimary, fontWeight: '600', fontSize: fontSize.sm }}>
                             {item.name}
                           </Text>
-                          <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, marginTop: 2 }}>
+                          <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, marginTop: 2 }}>
                             {item.quantity} {item.unit}
                             {'  ·  '}{item.protein}g P{'  '}{item.carbs}g C{'  '}{item.fat}g F
                           </Text>
                         </View>
-                        <Text style={{ color: colors.primary, fontWeight: '800', fontSize: fontSize.sm }}>
+                        <Text style={{ color: theme.accent, fontWeight: '800', fontSize: fontSize.sm }}>
                           {Math.round(item.calories)} kcal
                         </Text>
                       </View>
@@ -255,32 +256,30 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
 
                   {/* Total */}
                   <View style={{
-                    backgroundColor: colors.primaryLight,
+                    backgroundColor: theme.accent,
                     borderRadius: radius.md,
-                    borderWidth: 1,
-                    borderColor: `${colors.primary}30`,
                     padding: 14,
                   }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Text style={{ color: '#fff', fontWeight: '700', fontSize: fontSize.sm }}>Total</Text>
-                      <Text style={{ color: colors.primary, fontWeight: '900', fontSize: fontSize.lg }}>
+                      <Text style={{ color: theme.textPrimary, fontWeight: '700', fontSize: fontSize.sm }}>Total</Text>
+                      <Text style={{ color: theme.textPrimary, fontWeight: '900', fontSize: fontSize.lg }}>
                         {totalCalories} kcal
                       </Text>
                     </View>
-                    <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, marginTop: 4 }}>
+                    <Text style={{ color: theme.textPrimary, opacity: 0.85, fontSize: fontSize.xs, marginTop: 4 }}>
                       P {totalProtein}g  ·  C {totalCarbs}g  ·  F {totalFat}g
                     </Text>
                   </View>
 
                   {error && (
-                    <Text style={{ color: colors.danger, fontSize: fontSize.xs }}>{error}</Text>
+                    <Text style={{ color: theme.accent, fontSize: fontSize.xs }}>{error}</Text>
                   )}
 
                   <TouchableOpacity
                     onPress={handleLog}
                     disabled={stage === 'saving'}
                     style={{
-                      backgroundColor: colors.primary,
+                      backgroundColor: theme.accent,
                       borderRadius: radius.md,
                       padding: 15,
                       alignItems: 'center',
@@ -290,8 +289,8 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
                     }}
                   >
                     {stage === 'saving'
-                      ? <ActivityIndicator size="small" color="#0a0a0a" />
-                      : <Text style={{ color: '#0a0a0a', fontWeight: '900', fontSize: fontSize.md }}>
+                      ? <ActivityIndicator size="small" color={theme.textPrimary} />
+                      : <Text style={{ color: theme.textPrimary, fontWeight: '900', fontSize: fontSize.md }}>
                           Log {items.length} item{items.length !== 1 ? 's' : ''}
                         </Text>
                     }
@@ -302,7 +301,7 @@ export default function FoodLogModal({ visible, mealType, date, onClose, onLogge
                     disabled={stage === 'saving'}
                     style={{ alignItems: 'center', paddingVertical: 8 }}
                   >
-                    <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>
+                    <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>
                       Edit description
                     </Text>
                   </TouchableOpacity>

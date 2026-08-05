@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useFocusEffect } from 'expo-router'
 import { useAppStore } from '@/stores/useAppStore'
 import { Ionicons } from '@expo/vector-icons'
-import { colors, spacing, fontSize, radius } from '@/constants/theme'
+import { theme, spacing, fontSize, radius } from '@/constants/theme'
 import { fetchDayLogs, sumNutrition, deleteFoodItem, MealLog, MealType } from '@/lib/foodAgent'
 import LogFoodSheet from '@/components/nutrition/LogFoodSheet'
 
@@ -84,7 +84,7 @@ export default function NutritionScreen() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+    <View style={{ flex: 1, backgroundColor: theme.bg }}>
       <ScrollView contentContainerStyle={{
         padding: spacing.md,
         paddingTop: insets.top + spacing.md,
@@ -96,84 +96,84 @@ export default function NutritionScreen() {
             onPress={() => setCurrentDate(d => addDays(d, -1))}
             style={{
               width: 38, height: 38, borderRadius: 999,
-              backgroundColor: colors.bgCard, borderWidth: 1, borderColor: colors.border,
+              backgroundColor: theme.surface, borderWidth: 1, borderColor: theme.border,
               alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <Text style={{ color: '#fff', fontSize: 20 }}>‹</Text>
+            <Text style={{ color: theme.textPrimary, fontSize: 20 }}>‹</Text>
           </TouchableOpacity>
 
           <View style={{ alignItems: 'center' }}>
-            <Text style={{ color: '#fff', fontWeight: '800', fontSize: fontSize.lg }}>{dateLabel}</Text>
-            <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>{dateSubLabel}</Text>
+            <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.lg }}>{dateLabel}</Text>
+            <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>{dateSubLabel}</Text>
           </View>
 
           <TouchableOpacity
             onPress={() => setCurrentDate(d => addDays(d, 1))}
             style={{
               width: 38, height: 38, borderRadius: 999,
-              backgroundColor: colors.bgCard, borderWidth: 1, borderColor: colors.border,
+              backgroundColor: theme.surface, borderWidth: 1, borderColor: theme.border,
               alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <Text style={{ color: '#fff', fontSize: 20 }}>›</Text>
+            <Text style={{ color: theme.textPrimary, fontSize: 20 }}>›</Text>
           </TouchableOpacity>
         </View>
 
         {/* Calorie summary card */}
         <View style={{
-          backgroundColor: colors.bgCard, borderRadius: radius.lg,
-          borderWidth: 1, borderColor: colors.border,
+          backgroundColor: theme.surface, borderRadius: radius.lg,
+          borderWidth: 1, borderColor: theme.border,
           padding: spacing.md, gap: 14, marginBottom: spacing.sm,
         }}>
           {loadingLogs ? (
-            <ActivityIndicator color={colors.primary} />
+            <ActivityIndicator color={theme.accent} />
           ) : (
             <>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                <Text style={{ color: '#fff', fontSize: 30, fontWeight: '800' }}>
+                <Text style={{ color: theme.textPrimary, fontSize: 30, fontWeight: '800' }}>
                   {eaten.toLocaleString()}{' '}
-                  <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, fontWeight: '500' }}>
+                  <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, fontWeight: '500' }}>
                     / {target.toLocaleString()} kcal
                   </Text>
                 </Text>
                 <Text style={{
-                  color: remaining >= 0 ? colors.primary : colors.danger,
+                  color: theme.accent,
                   fontSize: fontSize.sm, fontWeight: '700',
                 }}>
                   {remaining >= 0 ? `${remaining.toLocaleString()} left` : `${Math.abs(remaining)} over`}
                 </Text>
               </View>
 
-              <View style={{ height: 7, backgroundColor: '#27272a', borderRadius: 99, overflow: 'hidden' }}>
+              <View style={{ height: 7, backgroundColor: theme.surface, borderWidth: 1, borderColor: theme.border, borderRadius: 99, overflow: 'hidden' }}>
                 <View style={{
                   width: `${Math.round(caloriePercent * 100)}%`,
                   height: '100%',
-                  backgroundColor: caloriePercent >= 1 ? colors.danger : colors.primary,
+                  backgroundColor: theme.accent,
                   borderRadius: 99,
                 }} />
               </View>
 
               <View style={{ flexDirection: 'row' }}>
                 {[
-                  { label: 'Protein', key: 'P', value: nutrition.protein, target: targetProtein, color: colors.protein },
-                  { label: 'Carbs',   key: 'C', value: nutrition.carbs,   target: targetCarbs,   color: colors.carbs },
-                  { label: 'Fat',     key: 'F', value: nutrition.fat,     target: targetFat,     color: colors.fat },
+                  { label: 'Protein', key: 'P', value: nutrition.protein, target: targetProtein, opacity: 1 },
+                  { label: 'Carbs',   key: 'C', value: nutrition.carbs,   target: targetCarbs,   opacity: 0.7 },
+                  { label: 'Fat',     key: 'F', value: nutrition.fat,     target: targetFat,     opacity: 0.45 },
                 ].map((m, i) => (
                   <View key={m.key} style={{
                     flex: 1,
                     paddingLeft: i === 0 ? 0 : 12,
                     borderLeftWidth: i === 0 ? 0 : 1,
-                    borderLeftColor: colors.border,
+                    borderLeftColor: theme.border,
                     marginLeft: i === 0 ? 0 : 12,
                     gap: 2,
                   }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                      <View style={{ width: 8, height: 8, borderRadius: 99, backgroundColor: m.color }} />
-                      <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, fontWeight: '600' }}>{m.label}</Text>
+                      <View style={{ width: 8, height: 8, borderRadius: 99, backgroundColor: theme.accent, opacity: m.opacity }} />
+                      <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, fontWeight: '600' }}>{m.label}</Text>
                     </View>
-                    <Text style={{ color: '#fff', fontSize: fontSize.md, fontWeight: '800' }}>{m.value}g</Text>
-                    <Text style={{ color: colors.textMuted, fontSize: fontSize.xs }}>of {m.target}g</Text>
+                    <Text style={{ color: theme.textPrimary, fontSize: fontSize.md, fontWeight: '800' }}>{m.value}g</Text>
+                    <Text style={{ color: theme.textMuted, fontSize: fontSize.xs }}>of {m.target}g</Text>
                   </View>
                 ))}
               </View>
@@ -187,27 +187,29 @@ export default function NutritionScreen() {
           const mealCals = getMealCalories(meal.key)
           return (
             <View key={meal.key} style={{
-              backgroundColor: colors.bgCard, borderRadius: radius.lg,
-              borderWidth: 1, borderColor: colors.border,
+              backgroundColor: theme.surface, borderRadius: radius.lg,
+              borderWidth: 1, borderColor: theme.border,
               marginBottom: spacing.sm, overflow: 'hidden',
             }}>
               <View style={{
                 flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
                 padding: 16,
                 borderBottomWidth: items.length > 0 ? 1 : 0,
-                borderBottomColor: colors.border,
+                borderBottomColor: theme.border,
               }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                  <Text style={{ color: '#fff', fontWeight: '800', fontSize: fontSize.md }}>
+                  <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.md }}>
                     {meal.label}
                   </Text>
                   {mealCals > 0 && (
                     <View style={{
-                      backgroundColor: colors.bgInput,
+                      backgroundColor: theme.bg,
+                      borderWidth: 1,
+                      borderColor: theme.border,
                       borderRadius: 999,
                       paddingHorizontal: 10, paddingVertical: 3,
                     }}>
-                      <Text style={{ color: colors.textMuted, fontSize: fontSize.xs, fontWeight: '600' }}>
+                      <Text style={{ color: theme.textMuted, fontSize: fontSize.xs, fontWeight: '600' }}>
                         {mealCals} kcal
                       </Text>
                     </View>
@@ -217,13 +219,13 @@ export default function NutritionScreen() {
                   onPress={() => setActiveMeal(meal.key)}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
-                  <Text style={{ color: colors.primary, fontWeight: '800', fontSize: fontSize.md }}>+ Add</Text>
+                  <Text style={{ color: theme.accent, fontWeight: '800', fontSize: fontSize.md }}>+ Add</Text>
                 </TouchableOpacity>
               </View>
 
               {items.length === 0 ? (
                 <View style={{ padding: 16 }}>
-                  <Text style={{ color: colors.textMuted, fontSize: fontSize.sm }}>Nothing logged yet</Text>
+                  <Text style={{ color: theme.textMuted, fontSize: fontSize.sm }}>Nothing logged yet</Text>
                 </View>
               ) : (
                 items.map((item, i) => (
@@ -231,19 +233,19 @@ export default function NutritionScreen() {
                     flexDirection: 'row', alignItems: 'center',
                     paddingVertical: 12, paddingHorizontal: 16,
                     borderBottomWidth: i < items.length - 1 ? 1 : 0,
-                    borderBottomColor: colors.border,
+                    borderBottomColor: theme.border,
                     gap: 12,
                     opacity: deletingId === item.id ? 0.4 : 1,
                   }}>
                     <View style={{ flex: 1 }}>
-                      <Text style={{ color: '#fff', fontSize: fontSize.sm, fontWeight: '600' }}>
+                      <Text style={{ color: theme.textPrimary, fontSize: fontSize.sm, fontWeight: '600' }}>
                         {item.name}
                       </Text>
-                      <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, marginTop: 2 }}>
+                      <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, marginTop: 2 }}>
                         {item.quantity} {item.unit}
                       </Text>
                     </View>
-                    <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, fontWeight: '600' }}>
+                    <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, fontWeight: '600' }}>
                       {Math.round(item.calories)} kcal
                     </Text>
                     <TouchableOpacity
@@ -251,7 +253,7 @@ export default function NutritionScreen() {
                       disabled={deletingId === item.id}
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     >
-                      <Ionicons name="trash-outline" size={16} color={colors.textMuted} />
+                      <Ionicons name="trash-outline" size={16} color={theme.textMuted} />
                     </TouchableOpacity>
                   </View>
                 ))

@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useFocusEffect } from 'expo-router'
 import { useAppStore } from '@/stores/useAppStore'
-import { colors, spacing, fontSize, radius } from '@/constants/theme'
+import { theme, spacing, fontSize, radius } from '@/constants/theme'
 import { fetchWeightHistory } from '@/lib/health'
 
 const PERIODS = ['30D', '90D', '1Y'] as const
@@ -25,7 +25,7 @@ function WeightChart({ data }: { data: Array<{ date: string; weight: number }> }
   if (data.length < 2) {
     return (
       <View style={{ height: 110, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ color: colors.textMuted, fontSize: fontSize.sm }}>
+        <Text style={{ color: theme.textMuted, fontSize: fontSize.sm }}>
           {data.length === 1 ? 'Log one more entry to see a chart' : 'No weight data yet'}
         </Text>
       </View>
@@ -55,13 +55,13 @@ function WeightChart({ data }: { data: Array<{ date: string; weight: number }> }
 
   return (
     <Svg width="100%" height={H} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
-      <Line x1="0" y1={PAD.top + chartH * 0.33} x2={W} y2={PAD.top + chartH * 0.33} stroke="#27272a" strokeWidth="1" />
-      <Line x1="0" y1={PAD.top + chartH * 0.66} x2={W} y2={PAD.top + chartH * 0.66} stroke="#27272a" strokeWidth="1" />
-      <Path d={areaPath} fill={`${colors.primary}14`} />
-      <Path d={linePath} fill="none" stroke={colors.primary} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      <Circle cx={last.x} cy={last.y} r="4" fill={colors.primary} />
-      <SvgText x={0} y={H} fill={colors.textMuted} fontSize="10">{first.date.slice(5)}</SvgText>
-      <SvgText x={W} y={H} textAnchor="end" fill={colors.textMuted} fontSize="10">{lastEntry.date.slice(5)}</SvgText>
+      <Line x1="0" y1={PAD.top + chartH * 0.33} x2={W} y2={PAD.top + chartH * 0.33} stroke={theme.border} strokeWidth="1" />
+      <Line x1="0" y1={PAD.top + chartH * 0.66} x2={W} y2={PAD.top + chartH * 0.66} stroke={theme.border} strokeWidth="1" />
+      <Path d={areaPath} fill={theme.accent} fillOpacity={0.08} />
+      <Path d={linePath} fill="none" stroke={theme.accent} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <Circle cx={last.x} cy={last.y} r="4" fill={theme.accent} />
+      <SvgText x={0} y={H} fill={theme.textMuted} fontSize="10">{first.date.slice(5)}</SvgText>
+      <SvgText x={W} y={H} textAnchor="end" fill={theme.textMuted} fontSize="10">{lastEntry.date.slice(5)}</SvgText>
     </Svg>
   )
 }
@@ -85,15 +85,15 @@ export default function ProgressScreen() {
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: colors.bg }}
+      style={{ flex: 1, backgroundColor: theme.bg }}
       contentContainerStyle={{ padding: spacing.md, paddingTop: insets.top + spacing.md, paddingBottom: 32 }}
     >
       {/* Header + period toggle */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md }}>
-        <Text style={{ color: '#fff', fontSize: fontSize.xxl, fontWeight: '800', letterSpacing: -0.3 }}>Progress</Text>
+        <Text style={{ color: theme.textPrimary, fontSize: fontSize.xxl, fontWeight: '800', letterSpacing: -0.3 }}>Progress</Text>
         <View style={{
           flexDirection: 'row', gap: 2,
-          backgroundColor: colors.bgCard, borderWidth: 1, borderColor: colors.border,
+          backgroundColor: theme.surface, borderWidth: 1, borderColor: theme.border,
           borderRadius: 999, padding: 3,
         }}>
           {PERIODS.map((p) => (
@@ -102,12 +102,12 @@ export default function ProgressScreen() {
               onPress={() => setPeriod(p)}
               style={{
                 paddingVertical: 5, paddingHorizontal: 12, borderRadius: 999,
-                backgroundColor: period === p ? colors.primary : 'transparent',
+                backgroundColor: period === p ? theme.accent : 'transparent',
               }}
             >
               <Text style={{
                 fontSize: 11.5, fontWeight: '800',
-                color: period === p ? '#0a0a0a' : colors.textSecondary,
+                color: period === p ? theme.textPrimary : theme.textSecondary,
               }}>
                 {p}
               </Text>
@@ -118,24 +118,24 @@ export default function ProgressScreen() {
 
       {/* Weight chart */}
       <View style={{
-        backgroundColor: colors.bgCard, borderRadius: radius.md,
-        borderWidth: 1, borderColor: colors.border,
+        backgroundColor: theme.surface, borderRadius: radius.md,
+        borderWidth: 1, borderColor: theme.border,
         padding: spacing.md, gap: 8, marginBottom: spacing.sm,
       }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
           <View>
-            <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, fontWeight: '600', letterSpacing: 0.5 }}>
+            <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, fontWeight: '600', letterSpacing: 0.5 }}>
               WEIGHT
             </Text>
-            <Text style={{ color: '#fff', fontSize: 28, fontWeight: '800' }}>
+            <Text style={{ color: theme.textPrimary, fontSize: 28, fontWeight: '800' }}>
               {latestWeight ?? '--'}{' '}
-              <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, fontWeight: '500' }}>kg</Text>
+              <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, fontWeight: '500' }}>kg</Text>
             </Text>
           </View>
           {weightHistory.length > 1 && (() => {
             const delta = weightHistory[weightHistory.length - 1].weight - weightHistory[0].weight
             return (
-              <Text style={{ color: delta <= 0 ? colors.primary : '#f87171', fontWeight: '800', fontSize: fontSize.sm }}>
+              <Text style={{ color: theme.accent, fontWeight: '800', fontSize: fontSize.sm }}>
                 {delta > 0 ? '+' : ''}{delta.toFixed(1)} kg
               </Text>
             )
@@ -147,51 +147,51 @@ export default function ProgressScreen() {
 
       {/* Calorie bar chart */}
       <View style={{
-        backgroundColor: colors.bgCard, borderRadius: radius.md,
-        borderWidth: 1, borderColor: colors.border,
+        backgroundColor: theme.surface, borderRadius: radius.md,
+        borderWidth: 1, borderColor: theme.border,
         padding: spacing.md, gap: 10, marginBottom: spacing.md,
       }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, fontWeight: '600', letterSpacing: 0.5 }}>
+          <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, fontWeight: '600', letterSpacing: 0.5 }}>
             CALORIES · LAST 7 DAYS
           </Text>
-          <Text style={{ color: '#fff', fontSize: fontSize.sm, fontWeight: '800' }}>avg --</Text>
+          <Text style={{ color: theme.textPrimary, fontSize: fontSize.sm, fontWeight: '800' }}>avg --</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8, height: 74 }}>
           {BAR_HEIGHTS.map((h, i) => (
             <View key={i} style={{
               flex: 1,
               height: `${h}%`,
-              backgroundColor: colors.primary,
+              backgroundColor: theme.accent,
               borderRadius: 5,
-              opacity: i < BAR_HEIGHTS.length - 1 ? 0.45 : 1,
+              opacity: i < BAR_HEIGHTS.length - 1 ? 0.4 : 1,
             }} />
           ))}
         </View>
         <View style={{ flexDirection: 'row', gap: 8 }}>
           {DAYS.map((d) => (
-            <Text key={d} style={{ flex: 1, textAlign: 'center', color: colors.textSecondary, fontSize: 10.5 }}>{d}</Text>
+            <Text key={d} style={{ flex: 1, textAlign: 'center', color: theme.textSecondary, fontSize: 10.5 }}>{d}</Text>
           ))}
         </View>
       </View>
 
       {/* Personal records */}
-      <Text style={{ color: '#fff', fontWeight: '800', fontSize: fontSize.md, marginBottom: spacing.sm }}>
+      <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.md, marginBottom: spacing.sm }}>
         Personal records
       </Text>
       <View style={{ flexDirection: 'row', gap: 10 }}>
         {RECORDS.map((r) => (
           <View key={r.label} style={{
-            flex: 1, backgroundColor: colors.bgCard,
-            borderRadius: radius.md, borderWidth: 1, borderColor: colors.border,
+            flex: 1, backgroundColor: theme.surface,
+            borderRadius: radius.md, borderWidth: 1, borderColor: theme.border,
             padding: 14, gap: 3,
           }}>
             <Text style={{ fontSize: 16 }}>🏆</Text>
-            <Text style={{ color: '#fff', fontSize: 19, fontWeight: '800' }}>
+            <Text style={{ color: theme.textPrimary, fontSize: 19, fontWeight: '800' }}>
               {r.value}
-              <Text style={{ fontSize: 11, color: colors.textSecondary, fontWeight: '500' }}> {r.unit}</Text>
+              <Text style={{ fontSize: 11, color: theme.textSecondary, fontWeight: '500' }}> {r.unit}</Text>
             </Text>
-            <Text style={{ color: colors.textSecondary, fontSize: 11 }}>{r.label}</Text>
+            <Text style={{ color: theme.textSecondary, fontSize: 11 }}>{r.label}</Text>
           </View>
         ))}
       </View>

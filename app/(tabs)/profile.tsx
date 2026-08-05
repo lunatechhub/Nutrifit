@@ -2,7 +2,7 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppStore } from '@/stores/useAppStore'
 import { useAuth } from '@/hooks/useAuth'
-import { colors, spacing, fontSize, radius } from '@/constants/theme'
+import { theme, spacing, fontSize, radius } from '@/constants/theme'
 
 export default function ProfileScreen() {
   const { user } = useAppStore()
@@ -42,21 +42,21 @@ export default function ProfileScreen() {
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: colors.bg }}
+      style={{ flex: 1, backgroundColor: theme.bg }}
       contentContainerStyle={{ padding: spacing.md, paddingTop: insets.top + spacing.md, paddingBottom: 32 }}
     >
       {/* Avatar + name */}
       <View style={{ alignItems: 'center', gap: 10, paddingTop: 8, marginBottom: spacing.lg }}>
         <View style={{
           width: 76, height: 76, borderRadius: 999,
-          backgroundColor: colors.primary,
+          backgroundColor: theme.accent,
           alignItems: 'center', justifyContent: 'center',
         }}>
-          <Text style={{ color: '#0a0a0a', fontWeight: '900', fontSize: 26 }}>{initials}</Text>
+          <Text style={{ color: theme.textPrimary, fontWeight: '900', fontSize: 26 }}>{initials}</Text>
         </View>
         <View style={{ alignItems: 'center' }}>
-          <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800' }}>{user?.name ?? 'Athlete'}</Text>
-          <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>NutriArc member</Text>
+          <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800' }}>{user?.name ?? 'Athlete'}</Text>
+          <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>NutriArc member</Text>
         </View>
       </View>
 
@@ -64,23 +64,23 @@ export default function ProfileScreen() {
       <View style={{ flexDirection: 'row', gap: 8, marginBottom: spacing.md }}>
         {stats.map((s) => (
           <View key={s.label} style={{
-            flex: 1, backgroundColor: colors.bgCard,
-            borderRadius: radius.md, borderWidth: 1, borderColor: colors.border,
+            flex: 1, backgroundColor: theme.surface,
+            borderRadius: radius.md, borderWidth: 1, borderColor: theme.border,
             padding: 12, alignItems: 'center', gap: 2,
           }}>
-            <Text style={{ color: '#fff', fontSize: 17, fontWeight: '800' }}>{s.value}</Text>
-            <Text style={{ color: colors.textSecondary, fontSize: 10, textAlign: 'center' }}>{s.label}</Text>
+            <Text style={{ color: theme.textPrimary, fontSize: 17, fontWeight: '800' }}>{s.value}</Text>
+            <Text style={{ color: theme.textSecondary, fontSize: 10, textAlign: 'center' }}>{s.label}</Text>
           </View>
         ))}
       </View>
 
       {/* Daily targets */}
-      <Text style={{ color: '#fff', fontWeight: '800', fontSize: fontSize.md, marginBottom: spacing.sm }}>
+      <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.md, marginBottom: spacing.sm }}>
         Daily targets
       </Text>
       <View style={{
-        backgroundColor: colors.bgCard, borderRadius: radius.md,
-        borderWidth: 1, borderColor: colors.border,
+        backgroundColor: theme.surface, borderRadius: radius.md,
+        borderWidth: 1, borderColor: theme.border,
         paddingHorizontal: spacing.md, marginBottom: spacing.md,
       }}>
         {targets.map((t, i) => (
@@ -88,18 +88,18 @@ export default function ProfileScreen() {
             flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
             paddingVertical: 13,
             borderBottomWidth: i < targets.length - 1 ? 1 : 0,
-            borderBottomColor: colors.border,
+            borderBottomColor: theme.border,
           }}>
-            <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>{t.label}</Text>
-            <Text style={{ color: '#fff', fontSize: fontSize.sm, fontWeight: '700' }}>{t.value}</Text>
+            <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>{t.label}</Text>
+            <Text style={{ color: theme.textPrimary, fontSize: fontSize.sm, fontWeight: '700' }}>{t.value}</Text>
           </View>
         ))}
       </View>
 
       {/* Goal + activity */}
       <View style={{
-        backgroundColor: colors.bgCard, borderRadius: radius.md,
-        borderWidth: 1, borderColor: colors.border,
+        backgroundColor: theme.surface, borderRadius: radius.md,
+        borderWidth: 1, borderColor: theme.border,
         paddingHorizontal: spacing.md, marginBottom: spacing.md,
       }}>
         {details.map((t, i) => (
@@ -107,10 +107,10 @@ export default function ProfileScreen() {
             flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
             paddingVertical: 13,
             borderBottomWidth: i < details.length - 1 ? 1 : 0,
-            borderBottomColor: colors.border,
+            borderBottomColor: theme.border,
           }}>
-            <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>{t.label}</Text>
-            <Text style={{ color: '#fff', fontSize: fontSize.sm, fontWeight: '700', textTransform: 'capitalize' }}>
+            <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>{t.label}</Text>
+            <Text style={{ color: theme.textPrimary, fontSize: fontSize.sm, fontWeight: '700', textTransform: 'capitalize' }}>
               {t.value}
             </Text>
           </View>
@@ -121,12 +121,12 @@ export default function ProfileScreen() {
       <TouchableOpacity
         onPress={signOut}
         style={{
-          backgroundColor: colors.bgCard, borderRadius: radius.md,
-          borderWidth: 1, borderColor: colors.border,
+          backgroundColor: theme.surface, borderRadius: radius.md,
+          borderWidth: 1, borderColor: theme.border,
           padding: 14, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8,
         }}
       >
-        <Text style={{ color: colors.danger, fontWeight: '700', fontSize: fontSize.sm }}>Sign out</Text>
+        <Text style={{ color: theme.accent, fontWeight: '700', fontSize: fontSize.sm }}>Sign out</Text>
       </TouchableOpacity>
     </ScrollView>
   )

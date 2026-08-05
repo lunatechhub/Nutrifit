@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import { Sex } from '@/types';
-import { colors, fontSize, spacing, radius } from '@/constants/theme'
+import { theme, fontSize, spacing, radius } from '@/constants/theme'
 
 interface Step1Props {
     name: string;
@@ -14,12 +14,12 @@ interface Step1Props {
 
 export default function Step1BasicInfo({ name, setName, age, setAge, sex, setSex, onNext }: Step1Props) {
   return (
-    <View style={{ padding: spacing.lg, paddingTop: spacing.xxl }}>
+    <View style={{ padding: spacing.lg, paddingTop: spacing.xxl, backgroundColor: theme.bg }}>
       {/* Title */}
-      <Text style={{ 
-        fontSize: fontSize.xxl, 
-        fontWeight: '800', 
-        color: colors.textPrimary, 
+      <Text style={{
+        fontSize: fontSize.xxl,
+        fontWeight: '800',
+        color: theme.textPrimary,
         marginBottom: spacing.xl,
         marginTop: spacing.xxl,  // ← add this
       }}>
@@ -27,26 +27,27 @@ export default function Step1BasicInfo({ name, setName, age, setAge, sex, setSex
       </Text>
 
       {/* Name input */}
-      <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
+      <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
         Name
       </Text>
       <TextInput
         placeholder="Enter your name"
         value={name}
         onChangeText={setName}
-        placeholderTextColor={colors.textMuted}
+        placeholderTextColor={theme.textMuted}
         style={{
           borderWidth: 1,
-          borderColor: colors.border,
+          borderColor: theme.border,
           borderRadius: radius.md,
           padding: spacing.md,
           marginBottom: spacing.lg,
-          color: colors.textPrimary,
+          color: theme.textPrimary,
+          backgroundColor: theme.surface,
         }}
       />
 
       {/* Age input */}
-      <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
+      <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, marginBottom: spacing.xs, fontWeight: '600' }}>
         Age
       </Text>
       <TextInput
@@ -54,19 +55,20 @@ export default function Step1BasicInfo({ name, setName, age, setAge, sex, setSex
         keyboardType="numeric"
         value={age}
         onChangeText={setAge}
-        placeholderTextColor={colors.textMuted}
+        placeholderTextColor={theme.textMuted}
         style={{
           borderWidth: 1,
-          borderColor: colors.border,
+          borderColor: theme.border,
           borderRadius: radius.md,
           padding: spacing.md,
           marginBottom: spacing.lg,
-          color: colors.textPrimary,
+          color: theme.textPrimary,
+          backgroundColor: theme.surface,
         }}
       />
 
       {/* Sex selector */}
-      <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary, marginBottom: spacing.xs, fontWeight: '600', marginTop: spacing.sm }}>
+      <Text style={{ fontSize: fontSize.sm, color: theme.textSecondary, marginBottom: spacing.xs, fontWeight: '600', marginTop: spacing.sm }}>
         Sex
         </Text>
       <View style={{ flexDirection: 'row', gap: spacing.md }}>
@@ -80,11 +82,11 @@ export default function Step1BasicInfo({ name, setName, age, setAge, sex, setSex
               borderWidth: 1,
               borderRadius: radius.md,
               alignItems: 'center',
-              backgroundColor: sex === option ? colors.primary : colors.bgCard,
-              borderColor: sex === option ? colors.primary : colors.border,
+              backgroundColor: sex === option ? theme.accent : theme.surface,
+              borderColor: sex === option ? theme.accent : theme.border,
             }}
           >
-            <Text style={{ color: sex === option ? '#fff' : colors.textSecondary, fontSize: fontSize.md }}>
+            <Text style={{ color: sex === option ? theme.textPrimary : theme.textSecondary, fontSize: fontSize.md }}>
               {option.charAt(0).toUpperCase() + option.slice(1)}
             </Text>
           </TouchableOpacity>
@@ -97,16 +99,17 @@ export default function Step1BasicInfo({ name, setName, age, setAge, sex, setSex
         disabled={!name || !age || !sex}
         style={{
           marginTop: spacing.xl,
-          backgroundColor: (!name || !age || !sex) ? colors.primaryDark : colors.primary,
+          backgroundColor: theme.accent,
+          opacity: (!name || !age || !sex) ? 0.5 : 1,
           padding: spacing.md,
           borderRadius: radius.md,
           alignItems: 'center',
         }}
       >
-        <Text style={{ color: '#fff' , fontSize: fontSize.md, fontWeight: '600' }}>
+        <Text style={{ color: theme.textPrimary, fontSize: fontSize.md, fontWeight: '600' }}>
           Next
         </Text>
       </TouchableOpacity>
     </View>
   );
-}   
+}

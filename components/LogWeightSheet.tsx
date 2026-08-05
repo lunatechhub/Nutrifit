@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { logWeight, recalculateAndSaveTargets } from '@/lib/health'
 import { useAppStore } from '@/stores/useAppStore'
-import { colors, spacing, fontSize, radius } from '@/constants/theme'
+import { theme, spacing, fontSize, radius } from '@/constants/theme'
 
 interface Props {
   visible: boolean
@@ -91,35 +91,35 @@ export default function LogWeightSheet({ visible, onClose, onLogged, currentWeig
         <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={stage === 'input' ? handleClose : undefined} />
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <View style={{
-            backgroundColor: colors.bgCard,
+            backgroundColor: theme.surface,
             borderTopLeftRadius: 20, borderTopRightRadius: 20,
-            borderTopWidth: 1, borderColor: colors.border,
+            borderTopWidth: 1, borderColor: theme.border,
             padding: spacing.md,
             paddingBottom: insets.bottom + spacing.md,
             gap: 16,
           }}>
-            <View style={{ width: 36, height: 4, backgroundColor: colors.border, borderRadius: 2, alignSelf: 'center' }} />
+            <View style={{ width: 36, height: 4, backgroundColor: theme.border, borderRadius: 2, alignSelf: 'center' }} />
 
             {stage === 'input' ? (
               <>
-                <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800' }}>Log Weight</Text>
+                <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800' }}>Log Weight</Text>
 
                 {currentWeight != null && (
-                  <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>
+                  <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>
                     Last logged: {currentWeight} kg
                   </Text>
                 )}
 
                 <View style={{
                   flexDirection: 'row', alignItems: 'center', gap: 12,
-                  backgroundColor: colors.bg, borderRadius: radius.md,
-                  borderWidth: 1, borderColor: colors.border,
+                  backgroundColor: theme.bg, borderRadius: radius.md,
+                  borderWidth: 1, borderColor: theme.border,
                   padding: 14,
                 }}>
                   <TextInput
-                    style={{ flex: 1, color: '#fff', fontSize: 28, fontWeight: '800' }}
+                    style={{ flex: 1, color: theme.textPrimary, fontSize: 28, fontWeight: '800' }}
                     placeholder="0.0"
-                    placeholderTextColor={colors.textMuted}
+                    placeholderTextColor={theme.textMuted}
                     keyboardType="decimal-pad"
                     value={value}
                     onChangeText={setValue}
@@ -127,22 +127,23 @@ export default function LogWeightSheet({ visible, onClose, onLogged, currentWeig
                     returnKeyType="done"
                     onSubmitEditing={handleSave}
                   />
-                  <Text style={{ color: colors.textSecondary, fontSize: fontSize.lg, fontWeight: '600' }}>kg</Text>
+                  <Text style={{ color: theme.textSecondary, fontSize: fontSize.lg, fontWeight: '600' }}>kg</Text>
                 </View>
 
-                {error && <Text style={{ color: '#f87171', fontSize: fontSize.sm }}>{error}</Text>}
+                {error && <Text style={{ color: theme.accent, fontSize: fontSize.sm }}>{error}</Text>}
 
                 <TouchableOpacity
                   onPress={handleSave}
                   disabled={loading || !value}
                   style={{
-                    backgroundColor: !value ? colors.border : colors.primary,
+                    backgroundColor: theme.accent,
+                    opacity: !value ? 0.5 : 1,
                     borderRadius: radius.md, padding: 16, alignItems: 'center',
                   }}
                 >
                   {loading
-                    ? <ActivityIndicator color="#0a0a0a" />
-                    : <Text style={{ color: '#0a0a0a', fontWeight: '800', fontSize: fontSize.md }}>Save</Text>
+                    ? <ActivityIndicator color={theme.textPrimary} />
+                    : <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.md }}>Save</Text>
                   }
                 </TouchableOpacity>
               </>
@@ -151,44 +152,45 @@ export default function LogWeightSheet({ visible, onClose, onLogged, currentWeig
                 <View style={{ alignItems: 'center', gap: 10, paddingVertical: 8 }}>
                   <View style={{
                     width: 52, height: 52, borderRadius: 999,
-                    backgroundColor: colors.primaryLight,
+                    backgroundColor: theme.bg,
+                    borderWidth: 1, borderColor: theme.border,
                     alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <Ionicons name="checkmark" size={28} color={colors.primary} />
+                    <Ionicons name="checkmark" size={28} color={theme.accent} />
                   </View>
-                  <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800' }}>Weight saved</Text>
-                  <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, textAlign: 'center' }}>
+                  <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800' }}>Weight saved</Text>
+                  <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, textAlign: 'center' }}>
                     {savedKg} kg logged
                     {diff !== 0 ? ` · ${diff > 0 ? '+' : ''}${diff.toFixed(1)} kg from last` : ''}
                   </Text>
                 </View>
 
                 <View style={{
-                  backgroundColor: colors.bg, borderRadius: radius.md,
-                  borderWidth: 1, borderColor: colors.border,
+                  backgroundColor: theme.bg, borderRadius: radius.md,
+                  borderWidth: 1, borderColor: theme.border,
                   padding: spacing.md, gap: 6,
                 }}>
-                  <Text style={{ color: '#fff', fontWeight: '700', fontSize: fontSize.sm }}>
+                  <Text style={{ color: theme.textPrimary, fontWeight: '700', fontSize: fontSize.sm }}>
                     Update calorie targets?
                   </Text>
-                  <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm }}>
+                  <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>
                     Your weight changed by {Math.abs(diff).toFixed(1)} kg. Recalculate BMR, TDEE, and macro targets to match your new weight.
                   </Text>
                 </View>
 
-                {error && <Text style={{ color: '#f87171', fontSize: fontSize.sm }}>{error}</Text>}
+                {error && <Text style={{ color: theme.accent, fontSize: fontSize.sm }}>{error}</Text>}
 
                 <TouchableOpacity
                   onPress={handleRecalculate}
                   disabled={loading}
                   style={{
-                    backgroundColor: colors.primary,
+                    backgroundColor: theme.accent,
                     borderRadius: radius.md, padding: 16, alignItems: 'center',
                   }}
                 >
                   {loading
-                    ? <ActivityIndicator color="#0a0a0a" />
-                    : <Text style={{ color: '#0a0a0a', fontWeight: '800', fontSize: fontSize.md }}>Yes, recalculate</Text>
+                    ? <ActivityIndicator color={theme.textPrimary} />
+                    : <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.md }}>Yes, recalculate</Text>
                   }
                 </TouchableOpacity>
 
@@ -196,10 +198,10 @@ export default function LogWeightSheet({ visible, onClose, onLogged, currentWeig
                   onPress={handleSkip}
                   style={{
                     borderRadius: radius.md, padding: 14, alignItems: 'center',
-                    borderWidth: 1, borderColor: colors.border,
+                    borderWidth: 1, borderColor: theme.border,
                   }}
                 >
-                  <Text style={{ color: colors.textSecondary, fontWeight: '600', fontSize: fontSize.md }}>Skip for now</Text>
+                  <Text style={{ color: theme.textSecondary, fontWeight: '600', fontSize: fontSize.md }}>Skip for now</Text>
                 </TouchableOpacity>
               </>
             )}

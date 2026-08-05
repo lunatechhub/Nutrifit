@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
-import { colors, fontSize, spacing, radius } from '@/constants/theme'
+import { theme, fontSize, spacing, radius } from '@/constants/theme'
 import { Sex, Goal, ActivityLevel } from '@/types'
 import { supabase } from '@/lib/supabase'
 import { useAppStore } from '@/stores/useAppStore'
@@ -93,37 +93,37 @@ export default function Step5Results({
   }
 
   return (
-    <View style={{ padding: spacing.lg, paddingTop: spacing.xxl }}>
+    <View style={{ padding: spacing.lg, paddingTop: spacing.xxl, backgroundColor: theme.bg }}>
 
       {/* Title */}
       <Text style={{
         fontSize: fontSize.xxl,
         fontWeight: '800',
-        color: colors.textPrimary,
+        color: theme.textPrimary,
         marginBottom: spacing.xs,
         marginTop: spacing.xxl,
       }}>
         Your Plan
       </Text>
-      <Text style={{ fontSize: fontSize.md, color: colors.textSecondary, marginBottom: spacing.xl }}>
+      <Text style={{ fontSize: fontSize.md, color: theme.textSecondary, marginBottom: spacing.xl }}>
         Based on your stats, here's what we recommend.
       </Text>
 
       {/* Calories card */}
       <View style={{
-        backgroundColor: colors.primary,
+        backgroundColor: theme.accent,
         borderRadius: radius.lg,
         padding: spacing.lg,
         alignItems: 'center',
         marginBottom: spacing.md,
       }}>
-        <Text style={{ color: '#fff', fontSize: fontSize.sm, fontWeight: '600', opacity: 0.8 }}>
+        <Text style={{ color: theme.textPrimary, fontSize: fontSize.sm, fontWeight: '600', opacity: 0.8 }}>
           Daily Target
         </Text>
-        <Text style={{ color: '#fff', fontSize: 48, fontWeight: '800' }}>
+        <Text style={{ color: theme.textPrimary, fontSize: 48, fontWeight: '800' }}>
           {targetCalories}
         </Text>
-        <Text style={{ color: '#fff', fontSize: fontSize.sm, opacity: 0.8 }}>calories / day</Text>
+        <Text style={{ color: theme.textPrimary, fontSize: fontSize.sm, opacity: 0.8 }}>calories / day</Text>
       </View>
 
       {/* Macros row */}
@@ -135,45 +135,45 @@ export default function Step5Results({
         ].map((macro) => (
           <View key={macro.label} style={{
             flex: 1,
-            backgroundColor: colors.bgCard,
+            backgroundColor: theme.surface,
             borderRadius: radius.md,
             padding: spacing.md,
             alignItems: 'center',
             borderWidth: 1,
-            borderColor: colors.border,
+            borderColor: theme.border,
           }}>
-            <Text style={{ color: colors.textPrimary, fontSize: fontSize.xl, fontWeight: '700' }}>
+            <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '700' }}>
               {macro.value}
             </Text>
-            <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs }}>{macro.unit}</Text>
-            <Text style={{ color: colors.textMuted, fontSize: fontSize.xs }}>{macro.label}</Text>
+            <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs }}>{macro.unit}</Text>
+            <Text style={{ color: theme.textMuted, fontSize: fontSize.xs }}>{macro.label}</Text>
           </View>
         ))}
       </View>
 
       {/* BMR / TDEE */}
       <View style={{
-        backgroundColor: colors.bgCard,
+        backgroundColor: theme.surface,
         borderRadius: radius.md,
         padding: spacing.md,
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: theme.border,
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginBottom: spacing.xl,
       }}>
         <View style={{ alignItems: 'center' }}>
-          <Text style={{ color: colors.textPrimary, fontSize: fontSize.lg, fontWeight: '700' }}>
+          <Text style={{ color: theme.textPrimary, fontSize: fontSize.lg, fontWeight: '700' }}>
             {Math.round(bmr)}
           </Text>
-          <Text style={{ color: colors.textMuted, fontSize: fontSize.xs }}>BMR</Text>
+          <Text style={{ color: theme.textMuted, fontSize: fontSize.xs }}>BMR</Text>
         </View>
-        <View style={{ width: 1, backgroundColor: colors.border }} />
+        <View style={{ width: 1, backgroundColor: theme.border }} />
         <View style={{ alignItems: 'center' }}>
-          <Text style={{ color: colors.textPrimary, fontSize: fontSize.lg, fontWeight: '700' }}>
+          <Text style={{ color: theme.textPrimary, fontSize: fontSize.lg, fontWeight: '700' }}>
             {Math.round(tdee)}
           </Text>
-          <Text style={{ color: colors.textMuted, fontSize: fontSize.xs }}>TDEE</Text>
+          <Text style={{ color: theme.textMuted, fontSize: fontSize.xs }}>TDEE</Text>
         </View>
       </View>
 
@@ -185,14 +185,14 @@ export default function Step5Results({
           style={{
             flex: 1,
             padding: spacing.md,
-            backgroundColor: colors.bgCard,
+            backgroundColor: theme.surface,
             borderRadius: radius.md,
             alignItems: 'center',
             borderWidth: 1,
-            borderColor: colors.border,
+            borderColor: theme.border,
           }}
         >
-          <Text style={{ color: colors.textPrimary, fontWeight: '600' }}>← Back</Text>
+          <Text style={{ color: theme.textPrimary, fontWeight: '600' }}>← Back</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -201,14 +201,15 @@ export default function Step5Results({
           style={{
             flex: 2,
             padding: spacing.md,
-            backgroundColor: colors.primary,
+            backgroundColor: theme.accent,
+            opacity: loading ? 0.6 : 1,
             borderRadius: radius.md,
             alignItems: 'center',
           }}
         >
           {loading
-            ? <ActivityIndicator color="#fff" />
-            : <Text style={{ color: '#fff', fontWeight: '700', fontSize: fontSize.md }}>Complete Setup</Text>
+            ? <ActivityIndicator color={theme.textPrimary} />
+            : <Text style={{ color: theme.textPrimary, fontWeight: '700', fontSize: fontSize.md }}>Complete Setup</Text>
           }
         </TouchableOpacity>
       </View>

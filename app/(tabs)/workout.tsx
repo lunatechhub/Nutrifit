@@ -6,7 +6,7 @@ import { useState, useCallback } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useFocusEffect } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
-import { colors, spacing, fontSize, radius } from '@/constants/theme'
+import { theme, spacing, fontSize, radius } from '@/constants/theme'
 import {
   fetchActivePlan, fetchPlanDays, fetchLoggedDays, logWorkoutDay,
   generateAndSavePlan,
@@ -54,27 +54,27 @@ function OptionButton({
       onPress={onPress}
       style={{
         flexDirection: 'row', alignItems: 'center', gap: 12,
-        backgroundColor: selected ? colors.primaryLight : colors.bgCard,
+        backgroundColor: selected ? theme.accent : theme.surface,
         borderRadius: radius.md, borderWidth: 1,
-        borderColor: selected ? colors.primary : colors.border,
+        borderColor: selected ? theme.accent : theme.border,
         padding: 14, marginBottom: 10,
       }}
     >
       {icon && (
         <Ionicons
           name={icon as React.ComponentProps<typeof Ionicons>['name']}
-          size={20} color={selected ? colors.primary : colors.textSecondary}
+          size={20} color={selected ? theme.textPrimary : theme.textSecondary}
         />
       )}
       <View style={{ flex: 1 }}>
-        <Text style={{ color: selected ? colors.primary : '#fff', fontWeight: '700', fontSize: fontSize.sm }}>
+        <Text style={{ color: theme.textPrimary, fontWeight: '700', fontSize: fontSize.sm }}>
           {label}
         </Text>
         {sub && (
-          <Text style={{ color: colors.textMuted, fontSize: fontSize.xs, marginTop: 2 }}>{sub}</Text>
+          <Text style={{ color: selected ? theme.textPrimary : theme.textMuted, opacity: selected ? 0.8 : 1, fontSize: fontSize.xs, marginTop: 2 }}>{sub}</Text>
         )}
       </View>
-      {selected && <Ionicons name="checkmark-circle" size={20} color={colors.primary} />}
+      {selected && <Ionicons name="checkmark-circle" size={20} color={theme.textPrimary} />}
     </TouchableOpacity>
   )
 }
@@ -86,44 +86,44 @@ function ExerciseCard({ ex, experience }: { ex: WorkoutExercise; experience: str
 
   return (
     <View style={{
-      backgroundColor: colors.bg, borderRadius: radius.md,
-      borderWidth: 1, borderColor: colors.border, marginBottom: 10,
+      backgroundColor: theme.surface, borderRadius: radius.md,
+      borderWidth: 1, borderColor: theme.border, marginBottom: 10,
     }}>
       <TouchableOpacity
         onPress={() => setExpanded(e => !e)}
         style={{ flexDirection: 'row', alignItems: 'center', padding: 14, gap: 10 }}
       >
         <View style={{ flex: 1 }}>
-          <Text style={{ color: '#fff', fontWeight: '800', fontSize: fontSize.sm }}>{ex.name}</Text>
-          <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, marginTop: 2 }}>
+          <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.sm }}>{ex.name}</Text>
+          <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, marginTop: 2 }}>
             {ex.sets} sets · {isFailure ? 'push to failure' : `${ex.reps} reps`} · {ex.rest_seconds}s rest
           </Text>
         </View>
         <View style={{
-          backgroundColor: colors.primaryLight, borderRadius: 99,
+          backgroundColor: theme.accent, borderRadius: 99,
           paddingHorizontal: 8, paddingVertical: 3,
         }}>
-          <Text style={{ color: colors.primary, fontSize: 11, fontWeight: '700' }}>
+          <Text style={{ color: theme.textPrimary, fontSize: 11, fontWeight: '700' }}>
             {ex.muscle_primary}
           </Text>
         </View>
         <Ionicons
           name={expanded ? 'chevron-up' : 'chevron-down'}
-          size={16} color={colors.textMuted}
+          size={16} color={theme.textMuted}
         />
       </TouchableOpacity>
 
       {expanded && (
-        <View style={{ borderTopWidth: 1, borderTopColor: colors.border, padding: 14, gap: 12 }}>
+        <View style={{ borderTopWidth: 1, borderTopColor: theme.border, padding: 14, gap: 12 }}>
           {/* Secondary muscles */}
           {ex.muscles_secondary.length > 0 && (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
               {ex.muscles_secondary.map(m => (
                 <View key={m} style={{
-                  backgroundColor: colors.bgCard, borderRadius: 99,
+                  backgroundColor: theme.bg, borderWidth: 1, borderColor: theme.border, borderRadius: 99,
                   paddingHorizontal: 8, paddingVertical: 3,
                 }}>
-                  <Text style={{ color: colors.textSecondary, fontSize: 11 }}>{m}</Text>
+                  <Text style={{ color: theme.textSecondary, fontSize: 11 }}>{m}</Text>
                 </View>
               ))}
             </View>
@@ -132,10 +132,10 @@ function ExerciseCard({ ex, experience }: { ex: WorkoutExercise; experience: str
           {/* Why this exercise */}
           {ex.why && (
             <View style={{ gap: 4 }}>
-              <Text style={{ color: colors.primary, fontSize: fontSize.xs, fontWeight: '700' }}>
+              <Text style={{ color: theme.accent, fontSize: fontSize.xs, fontWeight: '700' }}>
                 WHY THIS EXERCISE
               </Text>
-              <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, lineHeight: 20 }}>
+              <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, lineHeight: 20 }}>
                 {ex.why}
               </Text>
             </View>
@@ -144,11 +144,11 @@ function ExerciseCard({ ex, experience }: { ex: WorkoutExercise; experience: str
           {/* Form tip */}
           {ex.tips && (
             <View style={{
-              backgroundColor: colors.bgCard, borderRadius: radius.sm,
+              backgroundColor: theme.bg, borderWidth: 1, borderColor: theme.border, borderRadius: radius.sm,
               padding: 10, flexDirection: 'row', gap: 8, alignItems: 'flex-start',
             }}>
-              <Ionicons name="bulb-outline" size={14} color={colors.primary} style={{ marginTop: 2 }} />
-              <Text style={{ color: '#fff', fontSize: fontSize.xs, flex: 1, lineHeight: 18 }}>
+              <Ionicons name="bulb-outline" size={14} color={theme.accent} style={{ marginTop: 2 }} />
+              <Text style={{ color: theme.textPrimary, fontSize: fontSize.xs, flex: 1, lineHeight: 18 }}>
                 {ex.tips}
               </Text>
             </View>
@@ -157,14 +157,14 @@ function ExerciseCard({ ex, experience }: { ex: WorkoutExercise; experience: str
           {/* Alternatives */}
           {ex.alternatives?.length > 0 && (
             <View style={{ gap: 6 }}>
-              <Text style={{ color: colors.textMuted, fontSize: fontSize.xs, fontWeight: '700' }}>
+              <Text style={{ color: theme.textMuted, fontSize: fontSize.xs, fontWeight: '700' }}>
                 ALTERNATIVES
               </Text>
               {ex.alternatives.map((alt, i) => (
                 <View key={i} style={{ flexDirection: 'row', gap: 6, alignItems: 'flex-start' }}>
-                  <Ionicons name="swap-horizontal-outline" size={13} color={colors.textMuted} style={{ marginTop: 2 }} />
-                  <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, flex: 1, lineHeight: 18 }}>
-                    <Text style={{ color: '#fff', fontWeight: '600' }}>{alt.name}</Text>
+                  <Ionicons name="swap-horizontal-outline" size={13} color={theme.textMuted} style={{ marginTop: 2 }} />
+                  <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, flex: 1, lineHeight: 18 }}>
+                    <Text style={{ color: theme.textPrimary, fontWeight: '600' }}>{alt.name}</Text>
                     {' — '}{alt.reason}
                   </Text>
                 </View>
@@ -193,20 +193,20 @@ function DayModal({
 
   return (
     <Modal visible animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
-      <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      <View style={{ flex: 1, backgroundColor: theme.bg }}>
         <View style={{
           flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
           padding: spacing.md, paddingTop: spacing.xl ?? 32,
-          borderBottomWidth: 1, borderBottomColor: colors.border,
+          borderBottomWidth: 1, borderBottomColor: theme.border,
         }}>
           <View>
-            <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, fontWeight: '600' }}>
+            <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, fontWeight: '600' }}>
               {day.muscle_groups.join(' · ').toUpperCase()}
             </Text>
-            <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800' }}>{day.name}</Text>
+            <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800' }}>{day.name}</Text>
           </View>
           <TouchableOpacity onPress={onClose}>
-            <Ionicons name="close" size={24} color={colors.textSecondary} />
+            <Ionicons name="close" size={24} color={theme.textSecondary} />
           </TouchableOpacity>
         </View>
 
@@ -218,26 +218,27 @@ function DayModal({
 
         <View style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
-          padding: spacing.md, backgroundColor: colors.bg,
-          borderTopWidth: 1, borderTopColor: colors.border,
+          padding: spacing.md, backgroundColor: theme.bg,
+          borderTopWidth: 1, borderTopColor: theme.border,
         }}>
           <TouchableOpacity
             onPress={done ? undefined : handleLog}
             style={{
-              backgroundColor: done ? colors.bgCard : colors.primary,
+              backgroundColor: done ? theme.surface : theme.accent,
+              borderWidth: done ? 1 : 0, borderColor: theme.border,
               borderRadius: radius.md, padding: 16,
               alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 8,
             }}
           >
             {logging ? (
-              <ActivityIndicator color="#0a0a0a" />
+              <ActivityIndicator color={theme.textPrimary} />
             ) : (
               <>
                 <Ionicons
                   name={done ? 'checkmark-circle' : 'checkmark-circle-outline'}
-                  size={20} color={done ? colors.primary : '#0a0a0a'}
+                  size={20} color={done ? theme.accent : theme.textPrimary}
                 />
-                <Text style={{ color: done ? colors.primary : '#0a0a0a', fontWeight: '800', fontSize: fontSize.md }}>
+                <Text style={{ color: done ? theme.accent : theme.textPrimary, fontWeight: '800', fontSize: fontSize.md }}>
                   {done ? 'Completed this week' : 'Mark as done'}
                 </Text>
               </>
@@ -296,10 +297,10 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
 
   const steps = [
     <View key="goal">
-      <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
+      <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
         What's your goal?
       </Text>
-      <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
+      <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
         This shapes exercise selection, rep ranges, and rest times.
       </Text>
       {GOALS.map(g => (
@@ -309,10 +310,10 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
     </View>,
 
     <View key="type">
-      <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
+      <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
         Training style?
       </Text>
-      <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
+      <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
         Weights builds muscle and strength. Cardio improves stamina. Mixed does both.
       </Text>
       {TYPES.map(t => (
@@ -322,10 +323,10 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
     </View>,
 
     <View key="days">
-      <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
+      <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
         How many days per week?
       </Text>
-      <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
+      <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
         More days isn't always better — recovery is where you grow.
       </Text>
       <View style={{ flexDirection: 'row', gap: 12 }}>
@@ -334,23 +335,23 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
             key={n} onPress={() => { setDays(n); setSelectedDays([]) }}
             style={{
               flex: 1, paddingVertical: 20, borderRadius: radius.md,
-              backgroundColor: days === n ? colors.primaryLight : colors.bgCard,
-              borderWidth: 1, borderColor: days === n ? colors.primary : colors.border,
+              backgroundColor: days === n ? theme.accent : theme.surface,
+              borderWidth: 1, borderColor: days === n ? theme.accent : theme.border,
               alignItems: 'center',
             }}
           >
-            <Text style={{ color: days === n ? colors.primary : '#fff', fontSize: 28, fontWeight: '800' }}>{n}</Text>
-            <Text style={{ color: colors.textMuted, fontSize: fontSize.xs, marginTop: 2 }}>days</Text>
+            <Text style={{ color: theme.textPrimary, fontSize: 28, fontWeight: '800' }}>{n}</Text>
+            <Text style={{ color: days === n ? theme.textPrimary : theme.textMuted, opacity: days === n ? 0.8 : 1, fontSize: fontSize.xs, marginTop: 2 }}>days</Text>
           </TouchableOpacity>
         ))}
       </View>
     </View>,
 
     <View key="which-days">
-      <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
+      <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
         Which days?
       </Text>
-      <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
+      <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
         Pick exactly {days} days. The app will assign workouts to these and rest to the others.
       </Text>
       <View style={{ flexDirection: 'row', gap: 8 }}>
@@ -364,12 +365,12 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
               onPress={() => !maxed && toggleDay(dayNum)}
               style={{
                 flex: 1, paddingVertical: 14, borderRadius: radius.md,
-                backgroundColor: sel ? colors.primaryLight : colors.bgCard,
-                borderWidth: 1, borderColor: sel ? colors.primary : colors.border,
+                backgroundColor: sel ? theme.accent : theme.surface,
+                borderWidth: 1, borderColor: sel ? theme.accent : theme.border,
                 alignItems: 'center', opacity: maxed ? 0.35 : 1,
               }}
             >
-              <Text style={{ color: sel ? colors.primary : '#fff', fontSize: fontSize.xs, fontWeight: '800' }}>
+              <Text style={{ color: theme.textPrimary, fontSize: fontSize.xs, fontWeight: '800' }}>
                 {label}
               </Text>
             </TouchableOpacity>
@@ -377,17 +378,17 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
         })}
       </View>
       {selectedDays.length > 0 && (
-        <Text style={{ color: colors.textMuted, fontSize: fontSize.xs, marginTop: 14, textAlign: 'center' }}>
+        <Text style={{ color: theme.textMuted, fontSize: fontSize.xs, marginTop: 14, textAlign: 'center' }}>
           {selectedDays.length}/{days} selected
         </Text>
       )}
     </View>,
 
     <View key="exp">
-      <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
+      <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
         Your experience level?
       </Text>
-      <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
+      <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
         Beginners get rep targets. Intermediate and advanced push to failure.
       </Text>
       {EXPERIENCE.map(e => (
@@ -397,10 +398,10 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
     </View>,
 
     <View key="equip">
-      <Text style={{ color: '#fff', fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
+      <Text style={{ color: theme.textPrimary, fontSize: fontSize.xl, fontWeight: '800', marginBottom: 4 }}>
         What equipment do you have?
       </Text>
-      <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
+      <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, marginBottom: 24 }}>
         The app will pick exercises that match what's available to you.
       </Text>
       {EQUIPMENT.map(e => (
@@ -414,7 +415,7 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
   const isLast  = step === steps.length - 1
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+    <View style={{ flex: 1, backgroundColor: theme.bg }}>
       <ScrollView
         contentContainerStyle={{
           padding: spacing.md,
@@ -427,7 +428,7 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
           {steps.map((_, i) => (
             <View key={i} style={{
               height: 4, flex: 1, borderRadius: 99,
-              backgroundColor: i <= step ? colors.primary : colors.border,
+              backgroundColor: i <= step ? theme.accent : theme.border,
             }} />
           ))}
         </View>
@@ -438,18 +439,18 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
       <View style={{
         position: 'absolute', bottom: 0, left: 0, right: 0,
         flexDirection: 'row', gap: 10,
-        padding: spacing.md, backgroundColor: colors.bg,
-        borderTopWidth: 1, borderTopColor: colors.border,
+        padding: spacing.md, backgroundColor: theme.bg,
+        borderTopWidth: 1, borderTopColor: theme.border,
       }}>
         {step > 0 && (
           <TouchableOpacity
             onPress={() => setStep(s => s - 1)}
             style={{
               flex: 1, padding: 14, borderRadius: radius.md,
-              borderWidth: 1, borderColor: colors.border, alignItems: 'center',
+              borderWidth: 1, borderColor: theme.border, alignItems: 'center',
             }}
           >
-            <Text style={{ color: '#fff', fontWeight: '700' }}>Back</Text>
+            <Text style={{ color: theme.textPrimary, fontWeight: '700' }}>Back</Text>
           </TouchableOpacity>
         )}
         <TouchableOpacity
@@ -457,17 +458,17 @@ function SetupWizard({ onDone }: { onDone: () => void }) {
           disabled={!canNext || generating}
           style={{
             flex: 2, padding: 14, borderRadius: radius.md,
-            backgroundColor: canNext ? colors.primary : colors.bgCard,
+            backgroundColor: canNext ? theme.accent : theme.surface,
             alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 8,
           }}
         >
           {generating ? (
             <>
-              <ActivityIndicator color="#0a0a0a" size="small" />
-              <Text style={{ color: '#0a0a0a', fontWeight: '800' }}>Generating plan…</Text>
+              <ActivityIndicator color={theme.textPrimary} size="small" />
+              <Text style={{ color: theme.textPrimary, fontWeight: '800' }}>Generating plan…</Text>
             </>
           ) : (
-            <Text style={{ color: canNext ? '#0a0a0a' : colors.textMuted, fontWeight: '800' }}>
+            <Text style={{ color: canNext ? theme.textPrimary : theme.textMuted, fontWeight: '800' }}>
               {isLast ? 'Generate my plan' : 'Next'}
             </Text>
           )}
@@ -491,7 +492,7 @@ function PlanView({
   const todayDayNum = todayDow === 0 ? 7 : todayDow       // 1 = Mon … 7 = Sun
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+    <View style={{ flex: 1, backgroundColor: theme.bg }}>
       {/* Fixed header — safe area aware */}
       <View style={{
         paddingTop: insets.top + spacing.sm,
@@ -499,12 +500,12 @@ function PlanView({
         paddingRight: spacing.md + (insets.right ?? 0),
         paddingBottom: spacing.sm,
         flexDirection: 'row', alignItems: 'center', gap: 12,
-        backgroundColor: colors.bg,
-        borderBottomWidth: 1, borderBottomColor: colors.border,
+        backgroundColor: theme.bg,
+        borderBottomWidth: 1, borderBottomColor: theme.border,
       }}>
         <View style={{ flex: 1 }}>
-          <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs }}>Your plan</Text>
-          <Text style={{ color: '#fff', fontSize: fontSize.lg, fontWeight: '800' }} numberOfLines={1}>
+          <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs }}>Your plan</Text>
+          <Text style={{ color: theme.textPrimary, fontSize: fontSize.lg, fontWeight: '800' }} numberOfLines={1}>
             {plan.name}
           </Text>
         </View>
@@ -517,7 +518,7 @@ function PlanView({
           }
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="refresh-outline" size={22} color={colors.textMuted} />
+          <Ionicons name="refresh-outline" size={22} color={theme.textMuted} />
         </TouchableOpacity>
       </View>
 
@@ -529,7 +530,7 @@ function PlanView({
       >
 
         {/* 7-day week strip */}
-        <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, fontWeight: '700', marginBottom: 12 }}>
+        <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, fontWeight: '700', marginBottom: 12 }}>
           THIS WEEK
         </Text>
         <View style={{ flexDirection: 'row', gap: 6, marginBottom: spacing.lg }}>
@@ -543,24 +544,24 @@ function PlanView({
                 activeOpacity={day.is_rest ? 1 : 0.7}
                 style={{
                   flex: 1, alignItems: 'center', gap: 6, paddingVertical: 10,
-                  backgroundColor: done ? colors.primaryLight : isToday ? colors.bgCard : 'transparent',
+                  backgroundColor: done ? theme.accent : isToday ? theme.surface : 'transparent',
                   borderRadius: radius.sm,
-                  borderWidth: isToday ? 1 : 0, borderColor: colors.border,
+                  borderWidth: isToday ? 1 : 0, borderColor: theme.border,
                   opacity: day.is_rest ? 0.4 : 1,
                 }}
               >
-                <Text style={{ color: colors.textMuted, fontSize: 10, fontWeight: '600' }}>
+                <Text style={{ color: done ? theme.textPrimary : theme.textMuted, opacity: done ? 0.8 : 1, fontSize: 10, fontWeight: '600' }}>
                   {DOW[day.day_number - 1]}
                 </Text>
                 {day.is_rest
-                  ? <Ionicons name="moon-outline" size={18} color={colors.textMuted} />
+                  ? <Ionicons name="moon-outline" size={18} color={theme.textMuted} />
                   : done
-                    ? <Ionicons name="checkmark-circle" size={18} color={colors.primary} />
-                    : <Ionicons name="barbell-outline" size={18} color={isToday ? '#fff' : colors.textMuted} />
+                    ? <Ionicons name="checkmark-circle" size={18} color={theme.textPrimary} />
+                    : <Ionicons name="barbell-outline" size={18} color={isToday ? theme.textPrimary : theme.textMuted} />
                 }
                 <Text style={{
                   fontSize: 9, fontWeight: '700', textAlign: 'center',
-                  color: done ? colors.primary : isToday ? '#fff' : colors.textMuted,
+                  color: done || isToday ? theme.textPrimary : theme.textMuted,
                 }}>
                   {day.is_rest ? 'Rest' : day.name}
                 </Text>
@@ -574,13 +575,13 @@ function PlanView({
           const todayDay = days.find(d => d.day_number === todayDayNum)
           if (!todayDay || todayDay.is_rest) return (
             <View style={{
-              backgroundColor: colors.bgCard, borderRadius: radius.md,
-              borderWidth: 1, borderColor: colors.border,
+              backgroundColor: theme.surface, borderRadius: radius.md,
+              borderWidth: 1, borderColor: theme.border,
               padding: spacing.md, alignItems: 'center', gap: 8, marginBottom: spacing.lg,
             }}>
-              <Ionicons name="moon-outline" size={28} color={colors.textMuted} />
-              <Text style={{ color: '#fff', fontWeight: '700', fontSize: fontSize.md }}>Rest day today</Text>
-              <Text style={{ color: colors.textSecondary, fontSize: fontSize.sm, textAlign: 'center' }}>
+              <Ionicons name="moon-outline" size={28} color={theme.textMuted} />
+              <Text style={{ color: theme.textPrimary, fontWeight: '700', fontSize: fontSize.md }}>Rest day today</Text>
+              <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, textAlign: 'center' }}>
                 Recovery is part of the programme. Eat well and sleep.
               </Text>
             </View>
@@ -590,39 +591,40 @@ function PlanView({
             <TouchableOpacity
               onPress={() => setSelectedDay(todayDay)}
               style={{
-                backgroundColor: done ? colors.bgCard : colors.primary,
+                backgroundColor: done ? theme.surface : theme.accent,
+                borderWidth: done ? 1 : 0, borderColor: theme.border,
                 borderRadius: radius.md, padding: spacing.md,
                 flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: spacing.lg,
               }}
             >
               <View style={{
                 width: 44, height: 44, borderRadius: 12,
-                backgroundColor: done ? colors.primaryLight : 'rgba(0,0,0,0.15)',
+                backgroundColor: done ? theme.bg : 'rgba(0,0,0,0.15)',
                 alignItems: 'center', justifyContent: 'center',
               }}>
                 <Ionicons
                   name={done ? 'checkmark-circle' : 'barbell-outline'}
-                  size={22} color={done ? colors.primary : '#0a0a0a'}
+                  size={22} color={done ? theme.accent : theme.textPrimary}
                 />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ color: done ? colors.textSecondary : '#0a0a0a', fontSize: fontSize.xs, fontWeight: '600' }}>
+                <Text style={{ color: done ? theme.textSecondary : theme.textPrimary, opacity: done ? 1 : 0.8, fontSize: fontSize.xs, fontWeight: '600' }}>
                   {done ? 'DONE TODAY' : "TODAY'S WORKOUT"}
                 </Text>
-                <Text style={{ color: done ? '#fff' : '#0a0a0a', fontSize: fontSize.md, fontWeight: '800' }}>
+                <Text style={{ color: theme.textPrimary, fontSize: fontSize.md, fontWeight: '800' }}>
                   {todayDay.name}
                 </Text>
-                <Text style={{ color: done ? colors.textMuted : 'rgba(0,0,0,0.6)', fontSize: fontSize.xs, marginTop: 2 }}>
+                <Text style={{ color: done ? theme.textMuted : theme.textPrimary, opacity: done ? 1 : 0.6, fontSize: fontSize.xs, marginTop: 2 }}>
                   {todayDay.muscle_groups.join(' · ')} · {todayDay.exercises?.length ?? 0} exercises
                 </Text>
               </View>
-              <Ionicons name="chevron-forward" size={18} color={done ? colors.textMuted : '#0a0a0a'} />
+              <Ionicons name="chevron-forward" size={18} color={done ? theme.textMuted : theme.textPrimary} />
             </TouchableOpacity>
           )
         })()}
 
         {/* Full programme list */}
-        <Text style={{ color: colors.textSecondary, fontSize: fontSize.xs, fontWeight: '700', marginBottom: 12 }}>
+        <Text style={{ color: theme.textSecondary, fontSize: fontSize.xs, fontWeight: '700', marginBottom: 12 }}>
           FULL PROGRAMME
         </Text>
         {days.filter(d => !d.is_rest).map(day => {
@@ -632,30 +634,30 @@ function PlanView({
               key={day.id}
               onPress={() => setSelectedDay(day)}
               style={{
-                backgroundColor: colors.bgCard, borderRadius: radius.md,
-                borderWidth: 1, borderColor: done ? colors.primary + '40' : colors.border,
+                backgroundColor: theme.surface, borderRadius: radius.md,
+                borderWidth: 1, borderColor: done ? theme.accent : theme.border,
                 padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 8,
               }}
             >
               <View style={{
                 width: 40, height: 40, borderRadius: 10,
-                backgroundColor: done ? colors.primaryLight : colors.bg,
+                backgroundColor: done ? theme.accent : theme.bg,
                 alignItems: 'center', justifyContent: 'center',
               }}>
                 {done
-                  ? <Ionicons name="checkmark" size={20} color={colors.primary} />
-                  : <Text style={{ color: colors.textMuted, fontSize: fontSize.sm, fontWeight: '800' }}>
+                  ? <Ionicons name="checkmark" size={20} color={theme.textPrimary} />
+                  : <Text style={{ color: theme.textMuted, fontSize: fontSize.sm, fontWeight: '800' }}>
                       {DOW[day.day_number - 1]}
                     </Text>
                 }
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ color: '#fff', fontWeight: '800', fontSize: fontSize.sm }}>{day.name}</Text>
-                <Text style={{ color: colors.textMuted, fontSize: fontSize.xs, marginTop: 2 }}>
+                <Text style={{ color: theme.textPrimary, fontWeight: '800', fontSize: fontSize.sm }}>{day.name}</Text>
+                <Text style={{ color: theme.textMuted, fontSize: fontSize.xs, marginTop: 2 }}>
                   {day.muscle_groups.join(' · ')} · {day.exercises?.length ?? 0} exercises
                 </Text>
               </View>
-              <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+              <Ionicons name="chevron-forward" size={16} color={theme.textMuted} />
             </TouchableOpacity>
           )
         })}
@@ -710,8 +712,8 @@ export default function WorkoutScreen() {
   }
 
   if (loading) return (
-    <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' }}>
-      <ActivityIndicator color={colors.primary} size="large" />
+    <View style={{ flex: 1, backgroundColor: theme.bg, alignItems: 'center', justifyContent: 'center' }}>
+      <ActivityIndicator color={theme.accent} size="large" />
     </View>
   )
 

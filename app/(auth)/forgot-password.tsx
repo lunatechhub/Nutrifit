@@ -11,7 +11,7 @@ import {
 import { useState } from 'react'
 import { router } from 'expo-router'
 import { useAuth } from '@/hooks/useAuth'
-import { colors, spacing, fontSize, radius } from '@/constants/theme'
+import { theme, spacing, fontSize, radius } from '@/constants/theme'
 
 export default function ForgotPasswordScreen() {
   const { resetPassword } = useAuth()
@@ -41,7 +41,7 @@ export default function ForgotPasswordScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: colors.bg }}
+      style={{ flex: 1, backgroundColor: theme.bg }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
@@ -58,21 +58,21 @@ export default function ForgotPasswordScreen() {
             onPress={() => router.back()}
             style={{ marginBottom: spacing.lg }}
           >
-            <Text style={{ color: colors.primary, fontSize: fontSize.md }}>
+            <Text style={{ color: theme.accent, fontSize: fontSize.md }}>
               ← Back
             </Text>
           </TouchableOpacity>
           <Text style={{
             fontSize: fontSize.xxxl,
             fontWeight: '800',
-            color: colors.textPrimary,
+            color: theme.textPrimary,
             letterSpacing: -1,
           }}>
             Reset Password
           </Text>
           <Text style={{
             fontSize: fontSize.md,
-            color: colors.textSecondary,
+            color: theme.textSecondary,
             marginTop: spacing.xs,
           }}>
             Enter your email and we'll send you a link to reset your password
@@ -84,7 +84,7 @@ export default function ForgotPasswordScreen() {
           <View>
             <Text style={{
               fontSize: fontSize.sm,
-              color: colors.textSecondary,
+              color: theme.textSecondary,
               marginBottom: spacing.xs,
               fontWeight: '600',
             }}>
@@ -94,18 +94,18 @@ export default function ForgotPasswordScreen() {
               value={email}
               onChangeText={setEmail}
               placeholder="you@example.com"
-              placeholderTextColor={colors.textMuted}
+              placeholderTextColor={theme.textMuted}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
               style={{
-                backgroundColor: colors.bgCard,
+                backgroundColor: theme.surface,
                 borderRadius: radius.md,
                 padding: spacing.md,
-                color: colors.textPrimary,
+                color: theme.textPrimary,
                 fontSize: fontSize.md,
                 borderWidth: 1,
-                borderColor: colors.border,
+                borderColor: theme.border,
               }}
             />
           </View>
@@ -114,7 +114,8 @@ export default function ForgotPasswordScreen() {
             onPress={handleResetPassword}
             disabled={loading}
             style={{
-              backgroundColor: loading ? colors.primaryDark : colors.primary,
+              backgroundColor: theme.accent,
+              opacity: loading ? 0.6 : 1,
               borderRadius: radius.md,
               padding: spacing.md,
               alignItems: 'center',
@@ -122,7 +123,7 @@ export default function ForgotPasswordScreen() {
             }}
           >
             <Text style={{
-              color: '#fff',
+              color: theme.textPrimary,
               fontSize: fontSize.md,
               fontWeight: '700',
             }}>
@@ -138,7 +139,7 @@ export default function ForgotPasswordScreen() {
             }}
           >
             <Text style={{
-              color: colors.textSecondary,
+              color: theme.textSecondary,
               fontSize: fontSize.sm,
               fontWeight: '600',
             }}>
