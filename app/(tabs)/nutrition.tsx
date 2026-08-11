@@ -6,7 +6,7 @@ import { useFocusEffect } from 'expo-router'
 import { useAppStore } from '@/stores/useAppStore'
 import { Ionicons } from '@expo/vector-icons'
 import { theme, spacing, fontSize, radius } from '@/constants/theme'
-import { fetchDayLogs, sumNutrition, deleteFoodItem, MealLog, MealType } from '@/lib/foodAgent'
+import { fetchDayLogs, sumNutrition, deleteFoodItem, copyLogsToDate, MealLog, MealType } from '@/lib/foodAgent'
 import LogFoodSheet from '@/components/nutrition/LogFoodSheet'
 
 const MEALS: { label: string; key: MealType }[] = [
@@ -30,6 +30,20 @@ export default function NutritionScreen() {
   const [loadingLogs, setLoadingLogs] = useState(false)
   const [activeMeal, setActiveMeal] = useState<MealType | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [copying, setCopying] = useState(false)
+
+  async function handleCopyYesterday() {
+    const yesterday = format(addDays(currentDate, -1), 'yyyy-MM-dd')
+    setCopying(true)
+    try {
+      await copyLogsToDate(yesterday, dateStr)
+      await loadLogs()
+    } catch (e) {
+      Alert.alert('Nothing to copy', e instanceof Error ? e.message : 'No meals logged yesterday.')
+    } finally {
+      setCopying(false)
+    }
+  }
 
   const handleDeleteItem = (itemId: string, itemName: string) => {
     Alert.alert('Remove item', `Remove "${itemName}"?`, [
@@ -91,7 +105,7 @@ export default function NutritionScreen() {
         paddingBottom: 32,
       }}>
         {/* Date nav */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.md }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.sm }}>
           <TouchableOpacity
             onPress={() => setCurrentDate(d => addDays(d, -1))}
             style={{
@@ -119,6 +133,31 @@ export default function NutritionScreen() {
             <Text style={{ color: theme.textPrimary, fontSize: 20 }}>›</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Copy yesterday — only shown when today has no logs */}
+        {mealLogs.length === 0 && !loadingLogs && (
+          <TouchableOpacity
+            onPress={handleCopyYesterday}
+            disabled={copying}
+            style={{
+              flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
+              backgroundColor: theme.surface, borderRadius: radius.md,
+              borderWidth: 1, borderColor: theme.border,
+              paddingVertical: 10, marginBottom: spacing.sm,
+              opacity: copying ? 0.5 : 1,
+            }}
+          >
+            {copying
+              ? <ActivityIndicator size="small" color={theme.accent} />
+              : <>
+                  <Ionicons name="copy-outline" size={16} color={theme.accent} />
+                  <Text style={{ color: theme.accent, fontWeight: '700', fontSize: fontSize.sm }}>
+                    Copy yesterday's meals
+                  </Text>
+                </>
+            }
+          </TouchableOpacity>
+        )}
 
         {/* Calorie summary card */}
         <View style={{

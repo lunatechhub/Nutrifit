@@ -31,7 +31,7 @@ interface Props {
   onLogged: () => void
 }
 
-type Stage = 'options' | 'scanning' | 'text' | 'preview'
+type Stage = 'options' | 'scanning' | 'text' | 'preview' | 'estimate'
 type InputMode = 'type' | 'voice'
 
 const MEALS: { key: MealType; label: string }[] = [
@@ -51,6 +51,7 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
   const [items, setItems] = useState<ParsedFoodItem[]>([])
   const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
+  const [estimateCal, setEstimateCal] = useState('')
 
   function reset() {
     setStage('options')
@@ -59,7 +60,30 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
     setItems([])
     setError(null)
     setSaving(false)
+    setEstimateCal('')
     setMealType(initialMealType ?? getMealFromTime())
+  }
+
+  async function handleEstimateLog() {
+    const cal = parseInt(estimateCal, 10)
+    if (!cal || cal <= 0) return
+    setSaving(true)
+    try {
+      await logFoodItems('Quick estimate', mealType, [{
+        name: 'Estimated meal',
+        quantity: 1,
+        unit: 'serving',
+        calories: cal,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+      }], date)
+      reset()
+      onLogged()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to save')
+      setSaving(false)
+    }
   }
 
   function handleClose() {
@@ -320,6 +344,38 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                     </View>
                     <Text style={{ color: theme.textMuted, fontSize: 20 }}>›</Text>
                   </TouchableOpacity>
+
+                  {/* Quick estimate */}
+                  <TouchableOpacity
+                    onPress={() => setStage('estimate')}
+                    style={{
+                      backgroundColor: theme.surface,
+                      borderRadius: radius.lg,
+                      borderWidth: 1,
+                      borderColor: theme.border,
+                      padding: 20,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 16,
+                    }}
+                  >
+                    <View style={{
+                      width: 52, height: 52, borderRadius: 16,
+                      backgroundColor: '#1f1f1f',
+                      alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <Text style={{ fontSize: 26 }}>⚡</Text>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ color: '#fff', fontWeight: '800', fontSize: fontSize.md }}>
+                        Quick estimate
+                      </Text>
+                      <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, marginTop: 2 }}>
+                        Just enter calories — no itemising
+                      </Text>
+                    </View>
+                    <Text style={{ color: theme.textMuted, fontSize: 20 }}>›</Text>
+                  </TouchableOpacity>
                 </View>
               )}
 
@@ -331,7 +387,7 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                     Analyzing your meal...
                   </Text>
                   <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm, textAlign: 'center' }}>
-                    Claude is identifying food items{'\n'}and calculating nutrition
+                    Identifying food items{'\n'}and calculating nutrition
                   </Text>
                 </View>
               )}
@@ -501,6 +557,73 @@ export default function LogFoodSheet({ visible, initialMealType, date, onClose, 
                     <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>
                       ‹ Start over
                     </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              {/* ESTIMATE STAGE */}
+              {stage === 'estimate' && (
+                <View style={{ gap: 14 }}>
+                  <TouchableOpacity
+                    onPress={() => { setStage('options'); setError(null) }}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 }}
+                  >
+                    <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>‹ Back</Text>
+                  </TouchableOpacity>
+
+                  <Text style={{ color: theme.textSecondary, fontSize: fontSize.sm }}>
+                    Enter your best guess — something is always better than nothing
+                  </Text>
+
+                  <View style={{ alignItems: 'center', gap: 6, paddingVertical: 16 }}>
+                    <TextInput
+                      value={estimateCal}
+                      onChangeText={v => setEstimateCal(v.replace(/[^0-9]/g, ''))}
+                      placeholder="0"
+                      placeholderTextColor={theme.textMuted}
+                      keyboardType="number-pad"
+                      autoFocus
+                      style={{
+                        color: estimateCal ? theme.accent : theme.textMuted,
+                        fontSize: 72,
+                        fontWeight: '900',
+                        textAlign: 'center',
+                        minWidth: 160,
+                      }}
+                    />
+                    <Text style={{ color: theme.textSecondary, fontSize: fontSize.md, fontWeight: '600' }}>
+                      kcal
+                    </Text>
+                  </View>
+
+                  {error && (
+                    <Text style={{ color: theme.accent, fontSize: fontSize.sm }}>{error}</Text>
+                  )}
+
+                  <TouchableOpacity
+                    onPress={handleEstimateLog}
+                    disabled={!estimateCal || saving}
+                    style={{
+                      backgroundColor: estimateCal ? theme.accent : theme.surface,
+                      borderRadius: radius.md,
+                      padding: 17,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      gap: 8,
+                      borderWidth: estimateCal ? 0 : 1,
+                      borderColor: theme.border,
+                    }}
+                  >
+                    {saving
+                      ? <ActivityIndicator size="small" color="#0a0a0a" />
+                      : <Text style={{
+                          color: estimateCal ? '#0a0a0a' : theme.textMuted,
+                          fontWeight: '900', fontSize: fontSize.md,
+                        }}>
+                          Log {estimateCal || '—'} kcal to {MEALS.find(m => m.key === mealType)?.label}
+                        </Text>
+                    }
                   </TouchableOpacity>
                 </View>
               )}

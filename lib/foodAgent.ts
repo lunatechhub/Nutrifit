@@ -150,23 +150,57 @@ export async function fetchStreak(): Promise<number> {
   const todayMs = new Date(new Date().toDateString()).getTime()
   const MS_PER_DAY = 86400000
 
-  // Allow streak to start from today or yesterday (in case today isn't logged yet)
   const firstDateMs = new Date(uniqueDates[0] + 'T00:00:00').getTime()
   const gapFromToday = Math.round((todayMs - firstDateMs) / MS_PER_DAY)
-  if (gapFromToday > 1) return 0
+
+  // Allow up to 2-day gap from today (1 grace day bridge)
+  if (gapFromToday > 2) return 0
+
+  // If the last log was 2 days ago, the grace is already consumed bridging to today
+  let graceUsed = gapFromToday === 2
 
   let streak = 0
   let expectedMs = firstDateMs
+
   for (const dateStr of uniqueDates) {
     const dateMs = new Date(dateStr + 'T00:00:00').getTime()
     if (dateMs === expectedMs) {
       streak++
       expectedMs -= MS_PER_DAY
+    } else if (!graceUsed && Math.round((expectedMs - dateMs) / MS_PER_DAY) === 1) {
+      // Missed exactly 1 day — use the grace day
+      graceUsed = true
+      streak++
+      expectedMs = dateMs - MS_PER_DAY
     } else {
       break
     }
   }
   return streak
+}
+
+export async function copyLogsToDate(fromDate: string, toDate: string): Promise<void> {
+  const logs = await fetchDayLogs(fromDate)
+  const logsWithItems = logs.filter(l => l.items.length > 0)
+  if (logsWithItems.length === 0) throw new Error('No meals logged on that day')
+
+  for (const log of logsWithItems) {
+    await logFoodItems(
+      log.rawInput ?? 'Copied from previous day',
+      log.mealType,
+      log.items.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        unit: item.unit,
+        calories: item.calories,
+        protein: item.protein,
+        carbs: item.carbs,
+        fat: item.fat,
+        fiber: item.fiber,
+      })),
+      toDate,
+    )
+  }
 }
 
 export function sumNutrition(logs: MealLog[]) {
